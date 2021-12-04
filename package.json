@@ -1,0 +1,44 @@
+{
+  "name": "next-express-boilerplate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server/index.js",
+  "scripts": {
+    "start": "nodemon -w server server/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv-webpack": "^7.0.3",
+    "express": "^4.17.1",
+    "next": "^12.0.5",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/next": "^9.0.0",
+    "@types/react": "^17.0.37",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "@typescript-eslint/typescript-estree": "^5.5.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-typescript": "^12.0.0",
+    "eslint-config-next": "^12.0.5",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-sonarjs": "^0.11.0",
+    "eslint-plugin-unicorn": "^39.0.0",
+    "fork-ts-checker-webpack-plugin": "^6.5.0",
+    "prettier": "^2.5.0",
+    "tsconfig-paths": "^3.12.0",
+    "typescript": "^4.5.2"
+  }
+}
