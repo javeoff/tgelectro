@@ -3,6 +3,13 @@ const path = require('path');
 
 module.exports = {
     webpack: (configRef) => {
+        configRef.module.rules.push({
+          test: /\.svg$/,
+          issuer: /\.[jt]sx?$/,
+          use: ['@svgr/webpack'],
+        });
+
+
         configRef.plugins.push(
             new Dotenv({
                 defaults: path.resolve(process.cwd(), '.env'),

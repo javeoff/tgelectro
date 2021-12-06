@@ -22,21 +22,22 @@
       ],
       "@components/*": [
         "src/components/*"
+      ],
+      "@styled/*": [
+        "src/styled/*"
       ]
     },
     "baseUrl": ".",
     "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
-    "declaration": false,
     "noImplicitAny": false,
     "jsx": "preserve",
     "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": ".",
     "types": [
       "node",
-      "jest",
-      "@testing-library/jest-dom",
-      "codeceptjs"
     ],
     "lib": [
       "ESNext",
@@ -59,6 +60,7 @@
     "incremental": true
   },
   "include": [
+    "src/**/*",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"

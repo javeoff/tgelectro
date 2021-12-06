@@ -1,12 +1,12 @@
-import { FC } from 'react';
+import { NextPage } from 'next';
 
-import { Button } from '@components/Button/Button';
+import { IndexComponent } from '@components/Index/IndexComponent';
+import { siteName } from 'src/data/common';
 
-const IndexPage: FC = () => (
-  <>
-    <h1>Index Page 2</h1>
-    <Button />
-  </>
-);
+const IndexPage: NextPage = () => <IndexComponent />;
+
+IndexPage.getInitialProps = () => ({
+  title: `Главная страница - ${siteName}`,
+});
 
 export default IndexPage;

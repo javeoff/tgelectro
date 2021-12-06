@@ -186,6 +186,7 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
       ],
       "rules": {
+        "unicorn/prefer-module": "off",
         "@typescript-eslint/array-type": [
           "error",
           {
