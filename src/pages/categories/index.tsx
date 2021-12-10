@@ -4,11 +4,10 @@ import { Container } from 'reactstrap';
 
 import { Header } from '@components/Header/Header';
 import { Navbar } from '@components/Navbar/Navbar';
-import { categories } from 'src/data/categories';
 import { Footer } from '@components/Footer/Footer';
 import { menuItems } from 'src/data/menuItems';
-import { siteName } from 'src/data/common';
 import { Categories } from '@components/Categories/Categories';
+import { categories } from '../../data/categories';
 
 const pageIdx = 1;
 
@@ -33,10 +32,6 @@ const CategoriesPage: NextPage = () => (
     </SFooter>
   </>
 );
-
-CategoriesPage.getInitialProps = () => ({
-  title: `${menuItems[pageIdx].title} - ${siteName}`,
-});
 
 export default CategoriesPage;
 

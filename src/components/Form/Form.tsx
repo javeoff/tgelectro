@@ -52,7 +52,7 @@ export const Form: FC<IProps> = ({
       <SPoliticsWrapper>
         <input
           type='checkbox'
-          checked={isPolicyChecked}
+          defaultChecked={isPolicyChecked}
           onClick={() => setIsPolicyChecked(!isPolicyChecked)}
         />
         <div>

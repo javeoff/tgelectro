@@ -69,7 +69,9 @@ const ContactsPage: NextPage = () => (
         </Container>
       </SWrapper>
     </SSection>
+
     <Feedback />
+
     <div>
       <Footer categories={categories} />
     </div>

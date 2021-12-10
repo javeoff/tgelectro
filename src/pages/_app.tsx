@@ -1,40 +1,20 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Head from 'next/head';
-import { ComponentType, FC } from 'react';
-import { AppProps } from 'next/app';
-import { NextPage, NextPageContext } from 'next';
+import { FC } from 'react';
 import { Provider } from 'react-redux';
 
 import { store } from '@common/redux/store';
 import { Modal } from '@components/Modal/Modal';
+import { getPageProps } from '@common/utils/getPageProps';
+import { IAppProps } from '@common/types/next/IAppProps';
+import { IAppContext } from '@common/types/next/IAppContext';
+import { IAppInitialProps } from '@common/types/next/IAppInitialProps';
 
-export interface IPageProps {
-  title?: string;
-  style?: string;
-}
+type INextApp = FC<IAppProps> & {
+  getInitialProps?(context: IAppContext): Promise<IAppInitialProps>;
+};
 
-export interface IAppInitialProps {
-  pageProps: IPageProps;
-}
-
-export type IBaseNextPage<
-  Props = Record<string, unknown>,
-  PageProps = IPageProps & Props,
-> = ComponentType<PageProps> &
-  Omit<NextPage<PageProps>, 'getInitialProps'> & {
-    withoutLayout?: boolean;
-  } & {
-    getInitialProps?(
-      context: NextPageContext,
-    ): Partial<PageProps> | Promise<Partial<PageProps>>;
-  };
-
-export type IAppProps = Omit<AppProps, 'pageProps' | 'Component'> &
-  IAppInitialProps & {
-    Component: IBaseNextPage;
-  };
-
-const App: FC<IAppProps> = ({ Component, pageProps }) => (
+const App: INextApp = ({ Component, pageProps }) => (
   <Provider store={store}>
     <Head>
       <title>{pageProps.title}</title>
@@ -44,5 +24,19 @@ const App: FC<IAppProps> = ({ Component, pageProps }) => (
     <Component {...pageProps} />
   </Provider>
 );
+
+App.getInitialProps = async ({ ctx, Component }) => {
+  const appProps = await getPageProps(ctx);
+
+  if (Component.getInitialProps) {
+    return {
+      pageProps: { ...appProps, ...(await Component.getInitialProps(ctx)) },
+    };
+  }
+
+  return {
+    pageProps: appProps,
+  };
+};
 
 export default App;
