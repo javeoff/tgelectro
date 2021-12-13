@@ -2,21 +2,22 @@ const Dotenv = require('dotenv-webpack');
 const path = require('path');
 
 module.exports = {
-    webpack: (configRef) => {
-        configRef.module.rules.push({
-          test: /\.svg$/,
-          issuer: /\.[jt]sx?$/,
-          use: ['@svgr/webpack'],
-        });
+  pageExtensions: ['page.tsx'],
+  webpack: (configRef) => {
+      configRef.module.rules.push({
+        test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
+        use: ['@svgr/webpack'],
+      });
 
 
-        configRef.plugins.push(
-            new Dotenv({
-                defaults: path.resolve(process.cwd(), '.env'),
-                path: path.resolve(process.cwd(), '.env.local'),
-            }),
-        );
+      configRef.plugins.push(
+          new Dotenv({
+              defaults: path.resolve(process.cwd(), '.env'),
+              path: path.resolve(process.cwd(), '.env.local'),
+          }),
+      );
 
-        return configRef;
-    }
+      return configRef;
+  }
 }

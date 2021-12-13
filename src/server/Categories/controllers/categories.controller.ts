@@ -7,10 +7,10 @@ import { CategoriesFetcher } from '@server/Categories/services/categories.fetche
 export class CategoriesController {
   public constructor(private readonly categoriesFetcher: CategoriesFetcher) {}
 
-  @Page('categories')
-  public categoriesPage(): unknown {
+  @Page('categories1')
+  public async categoriesPage(): Promise<unknown> {
     return {
-      categories: this.categoriesFetcher.get(),
+      categories: await this.categoriesFetcher.fetch(),
     };
   }
 }

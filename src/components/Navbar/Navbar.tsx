@@ -4,21 +4,29 @@ import Link from 'next/link';
 
 import { mainColor } from '@common/utils/colors';
 import { IMenuItem } from '@common/types/IMenuItem';
+import {
+  TWithNavbarState,
+  withNavbarState,
+} from '@components/Navbar/hocs/withNavbarState';
 
 interface IProps {
   menuItems: IMenuItem[];
-  activeItemIdx: number;
 }
 
-export const Navbar: FC<IProps> = ({ menuItems, activeItemIdx }) => (
+const NavbarComponent: FC<TWithNavbarState & IProps> = ({
+  currentPage,
+  menuItems,
+}) => (
   <SWrapper>
-    {menuItems.map(({ title, link }, idx) => (
+    {menuItems.map(({ title, link, name }, idx) => (
       <Link key={idx} href={link}>
-        <MenuItem isActive={activeItemIdx === idx}>{title}</MenuItem>
+        <MenuItem isActive={currentPage === name}>{title}</MenuItem>
       </Link>
     ))}
   </SWrapper>
 );
+
+export const Navbar = withNavbarState(NavbarComponent);
 
 const SWrapper = styled.div`
   display: flex;

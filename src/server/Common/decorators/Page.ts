@@ -8,7 +8,9 @@ const getPageDecorators = (
   route = '',
   hasAuthGuard = true,
 ): Parameters<typeof applyDecorators> => {
-  const decorators = [Get(route)];
+  const routePath = route.replace('index', '/');
+
+  const decorators = [Get(routePath)];
 
   if (hasAuthGuard) {
     // decorators.push(UseGuards())

@@ -267,6 +267,14 @@
     },
     {
       "files": [
+        "*.entity.ts"
+      ],
+      "rules": {
+        "import/no-cycle": "off"
+      }
+    },
+    {
+      "files": [
         "src/**/duck/**/*.*"
       ],
       "rules": {

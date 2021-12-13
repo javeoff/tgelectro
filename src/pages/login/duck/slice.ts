@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Feature } from '@common/enums/Feature';
 
-export interface ICommonState {
+export interface ILoginState {
   username: string;
 }
 
@@ -10,7 +10,7 @@ export const loginSlice = createSlice({
   name: Feature.LOGIN_PAGE,
   initialState: {
     username: 'username',
-  } as ICommonState,
+  } as ILoginState,
   reducers: {
     setUsername: (draft, { payload }: PayloadAction<string>) => {
       draft.username = payload;

@@ -6,6 +6,7 @@ import {
 } from '@components/Modal/hocs/withHeaderState';
 import { OrderModal } from '@components/Modal/components/OrderModal/OrderModal';
 import { FeedbackModal } from '@components/Modal/components/FeedbackModal/FeedbackModal';
+import { ModalType } from '@components/Modal/enums/ModalType';
 
 const ModalComponent: FC<IWithModalState> = ({
   modalId,
@@ -17,7 +18,7 @@ const ModalComponent: FC<IWithModalState> = ({
   };
 
   switch (modalId) {
-    case 0:
+    case ModalType.ORDER_MODAL:
       return (
         <OrderModal
           defaultDescriptionInputValue={defaultModalInputValue}
@@ -25,7 +26,7 @@ const ModalComponent: FC<IWithModalState> = ({
           isActive={modalId === 0}
         />
       );
-    case 1:
+    case ModalType.FEEDBACK_MODAL:
       return (
         <FeedbackModal toggleModal={toggleModal} isActive={modalId === 1} />
       );

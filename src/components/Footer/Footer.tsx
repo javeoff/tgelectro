@@ -2,15 +2,16 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
-import {
-  Categories,
-  ICategoriesProps,
-} from '@components/Categories/Categories';
+import { Categories } from '@components/Categories/Categories';
 import { Logo } from '@components/Logo/Logo';
 import { Contacts } from '@components/Contacts/Contacts';
 import { darkColor } from '@common/utils/colors';
+import {
+  IWithFooterState,
+  withFooterState,
+} from '@components/Footer/hocs/withFooterState';
 
-export const Footer: FC<ICategoriesProps> = ({ categories }) => (
+const FooterComponent: FC<IWithFooterState> = ({ categories }) => (
   <SWrapper>
     <Container>
       <SCategories>
@@ -26,6 +27,8 @@ export const Footer: FC<ICategoriesProps> = ({ categories }) => (
     </Container>
   </SWrapper>
 );
+
+export const Footer = withFooterState(FooterComponent);
 
 const SWrapper = styled.div`
   color: #fff;

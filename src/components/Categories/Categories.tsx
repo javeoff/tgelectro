@@ -3,14 +3,13 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { Col, Row } from 'reactstrap';
 
-import { ICategory } from '@common/types/ICategory';
 import { mainColor } from '@common/utils/colors';
+import {
+  IWithCategoriesState,
+  withCategoriesState,
+} from '@components/Categories/hocs/withCategoriesState';
 
-export interface ICategoriesProps {
-  categories: ICategory[];
-}
-
-export const Categories: FC<ICategoriesProps> = ({ categories }) => {
+const CategoriesComponent: FC<IWithCategoriesState> = ({ categories }) => {
   const splitCount = 18;
   const columnCount = 4;
 
@@ -37,6 +36,8 @@ export const Categories: FC<ICategoriesProps> = ({ categories }) => {
     </div>
   );
 };
+
+export const Categories = withCategoriesState(CategoriesComponent);
 
 const SCategoryList = styled.div`
   margin-top: 30px;

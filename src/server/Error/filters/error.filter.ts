@@ -14,7 +14,21 @@ export class ErrorFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const nextPath = request.url.slice(1).replace('?api=true', '');
+    if (request.url.includes('?api=true')) {
+      response.json({});
+
+      return;
+    }
+
+    const nextPath = request.url.slice(1);
+
+    if (nextPath.includes('index')) {
+      // eslint-disable-next-line no-console
+      console.log(nextPath);
+      response.render('404');
+
+      return;
+    }
 
     response.render(nextPath);
   }
