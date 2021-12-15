@@ -1,7 +1,7 @@
 import { NextPageContext } from 'next';
 
-import { IPageProps } from '@common/types/next/IPageProps';
+import { IBasePageResponse } from '@common/types/next/IBasePageResponse';
 
 export type INextPageContext = NextPageContext & {
-  query: IPageProps;
+  query: IBasePageResponse;
 };

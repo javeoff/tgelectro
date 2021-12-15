@@ -2,11 +2,11 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
-  HttpException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-@Catch(HttpException)
+@Catch()
 export class ErrorFilter implements ExceptionFilter {
   public catch(error: Error, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
@@ -20,16 +20,22 @@ export class ErrorFilter implements ExceptionFilter {
       return;
     }
 
-    const nextPath = request.url.slice(1);
+    if (error instanceof NotFoundException) {
+      const nextPath = request.url.slice(1);
 
-    if (nextPath.includes('index')) {
-      // eslint-disable-next-line no-console
-      console.log(nextPath);
-      response.render('404');
+      if (nextPath.includes('index')) {
+        response.render('404');
+
+        return;
+      }
+
+      response.render(nextPath);
 
       return;
     }
 
-    response.render(nextPath);
+    response.json({
+      message: error.message,
+    });
   }
 }

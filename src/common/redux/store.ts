@@ -7,18 +7,19 @@ import {
 } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
-// eslint-disable-next-line import/no-cycle
 import { commonSlice } from '@common/duck/slice';
-import { loginSlice } from '@pages/login/duck/slice';
+import { catalogSlice } from '@pages/index/components/Catalog/duck/slice';
 import { Feature } from '@common/enums/Feature';
 
 const reducer = {
-  [commonSlice.name]: commonSlice.reducer,
-  [Feature.LOGIN_PAGE]: loginSlice.reducer,
+  [Feature.COMMON]: commonSlice.reducer,
+  // [Feature.AUTH]: authSlice.reducer,
+  [Feature.CATALOG]: catalogSlice.reducer,
 };
 
 export const setStates = {
-  [commonSlice.name]: commonSlice.actions.setState,
+  [Feature.COMMON]: commonSlice.actions.setState,
+  [Feature.CATALOG]: catalogSlice.actions.setState,
 };
 
 export type IRootState = StateFromReducersMapObject<typeof reducer>;

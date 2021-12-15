@@ -9,6 +9,9 @@ import { FabricatorsModule } from '@server/Fabricators/fabricators.module';
 import { ProductsModule } from '@server/Products/products.module';
 import { FabricatorsFetcher } from '@server/Fabricators/services/fabricators.fetcher';
 import { CategoriesFetcher } from '@server/Categories/services/categories.fetcher';
+import { AuthModule } from '@server/Auth/auth.module';
+import { UsersModule } from '@server/Users/users.module';
+import { SystemErrorModule } from '@server/SystemError/SystemErrorModule';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { CategoriesFetcher } from '@server/Categories/services/categories.fetche
     CategoriesModule,
     FabricatorsModule,
     ProductsModule,
+    AuthModule,
+    UsersModule,
+    SystemErrorModule,
   ],
   controllers: [AppController],
   providers: [FabricatorsFetcher, CategoriesFetcher],

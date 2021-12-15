@@ -32,9 +32,6 @@ App.getInitialProps = wrapper.getInitialAppProps((store) => async (context) => {
 
   setFeaturesState(appProps, store);
 
-  // eslint-disable-next-line no-console
-  console.log('app', appProps);
-
   if (Component.getInitialProps) {
     const pageProps = await Component.getInitialProps(ctx);
 

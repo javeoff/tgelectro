@@ -6,17 +6,13 @@ import { Categories } from '@components/Categories/Categories';
 import { Logo } from '@components/Logo/Logo';
 import { Contacts } from '@components/Contacts/Contacts';
 import { darkColor } from '@common/utils/colors';
-import {
-  IWithFooterState,
-  withFooterState,
-} from '@components/Footer/hocs/withFooterState';
 
-const FooterComponent: FC<IWithFooterState> = ({ categories }) => (
+export const Footer: FC = () => (
   <SWrapper>
     <Container>
       <SCategories>
         <h2>Категории товаров</h2>
-        <Categories categories={categories} />
+        <Categories />
       </SCategories>
       <SRow>
         <Logo />
@@ -27,8 +23,6 @@ const FooterComponent: FC<IWithFooterState> = ({ categories }) => (
     </Container>
   </SWrapper>
 );
-
-export const Footer = withFooterState(FooterComponent);
 
 const SWrapper = styled.div`
   color: #fff;

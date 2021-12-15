@@ -2,14 +2,15 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { filterFabricators } from '@pages/index/components/Catalog/utils/filterFabricators';
-import {
-  CatalogGallery,
-  ICatalogGalleryProps,
-} from '@pages/index/components/Catalog/components/CatalogGallery/CatalogGallery';
+import { CatalogGallery } from '@pages/index/components/Catalog/components/CatalogGallery/CatalogGallery';
 import { AlphabetRange } from '@pages/index/components/Catalog/components/AlphabetRange/AlphabetRange';
 import { range } from '@pages/index/components/Catalog/components/AlphabetRange/utils/range';
+import {
+  IWithCatalogState,
+  withCatalogState,
+} from '@pages/index/components/Catalog/hocs/withCatalogState';
 
-export const Catalog: FC<ICatalogGalleryProps> = ({ fabricators }) => {
+const CatalogComponent: FC<IWithCatalogState> = ({ fabricators }) => {
   const [activeRangeIdx, setActiveRangeIdx] = useState<number>(0);
   const filteredFabricators = filterFabricators(
     fabricators,
@@ -31,6 +32,8 @@ export const Catalog: FC<ICatalogGalleryProps> = ({ fabricators }) => {
     </div>
   );
 };
+
+export const Catalog = withCatalogState(CatalogComponent);
 
 const SAlphabetRange = styled.div`
   margin-top: 20px;

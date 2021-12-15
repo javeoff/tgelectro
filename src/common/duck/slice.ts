@@ -2,6 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 
 import { ModalType } from '@components/Modal/enums/ModalType';
 import { PageName } from '@common/enums/PageName';
+// eslint-disable-next-line import/no-cycle
 import { createFeatureSlice } from '@common/redux/utils/createFeatureSlice';
 import { IBaseFeatureState } from '@common/redux/types/IBaseFeatureState';
 import { Feature } from '@common/enums/Feature';
@@ -12,10 +13,12 @@ export interface ICommonProps {
   categories: ICategory[];
 }
 
-export interface ICommonState extends IBaseFeatureState<ICommonProps> {
+export interface ICommon {
   modalId: ModalType | undefined;
   defaultModalInputValue: string;
 }
+
+type ICommonState = ICommon & IBaseFeatureState<ICommonProps>;
 
 export const commonSlice = createFeatureSlice({
   name: Feature.COMMON,

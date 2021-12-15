@@ -21,8 +21,10 @@ export class AppController {
           pageId: PageName.INDEX,
           categories: await this.categoriesFetcher.fetch(),
         },
+        [Feature.CATALOG]: {
+          fabricators: await this.fabricatorsFetcher.fetch(),
+        },
       },
-      fabricators: await this.fabricatorsFetcher.fetch(),
       title: 'Index Page',
     };
   }

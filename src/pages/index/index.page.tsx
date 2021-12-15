@@ -6,7 +6,7 @@ import { Header } from '@components/Header/Header';
 import { Footer } from '@components/Footer/Footer';
 import { Catalog } from '@pages/index/components/Catalog/Catalog';
 
-const IndexPage: NextPage = ({ fabricators }) => (
+const IndexPage: NextPage = () => (
   <>
     <SHeader>
       <Header />
@@ -14,7 +14,7 @@ const IndexPage: NextPage = ({ fabricators }) => (
     <SWrapper>
       <Container>
         <h2>Каталог производителей</h2>
-        <Catalog fabricators={fabricators} />
+        <Catalog />
       </Container>
     </SWrapper>
     <SFooter>

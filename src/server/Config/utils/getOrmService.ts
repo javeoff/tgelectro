@@ -2,12 +2,9 @@ import { AnyObject } from 'immer/dist/types/types-internal';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { DatabaseName } from '@server/Config/enums/DatabaseName';
+import { IBaseConfigService } from '@server/Config/types/IBaseConfigService';
 
-interface IBaseOrmService {
-  get(param: string): unknown;
-}
-
-export const getOrmService = <Service extends IBaseOrmService>(
+export const getOrmService = <Service extends IBaseConfigService>(
   configService: Service,
 ): AnyObject => ({
   type: configService.get(DatabaseName.DB_TYPE),

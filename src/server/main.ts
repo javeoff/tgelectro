@@ -1,12 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from '@server/app.module';
-import { ErrorFilter } from '@server/Error/filters/error.filter';
 
 const bootstrap = async (): Promise<void> => {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalFilters(new ErrorFilter());
+  app.useGlobalFilters();
 
   await app.listen(3_000);
 };

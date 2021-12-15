@@ -1,26 +1,22 @@
 import { EnhancedStore } from '@reduxjs/toolkit';
 
 import { IRootState, setStates } from '@common/redux/store';
-import { IPageProps } from '@common/types/next/IPageProps';
 import { Feature } from '@common/enums/Feature';
+import { IBasePageResponse } from '@common/types/next/IBasePageResponse';
+import { IPageProps } from '@common/types/next/IPageProps';
 
 export const setFeaturesState = (
-  appProps: IPageProps,
+  appProps: IBasePageResponse | IPageProps,
   store: EnhancedStore<IRootState>,
 ): void => {
-  if (!appProps || !('features' in appProps)) {
-    return;
-  }
+  if ('features' in appProps) {
+    Object.keys(appProps.features || {}).forEach((feature) => {
+      const setState = setStates[feature as Feature];
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const feature of Object.keys(appProps.features || {})) {
-    const setState = setStates[feature as Feature];
+      const state = appProps.features[feature];
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const state = appProps.features[feature];
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    store.dispatch(setState(state));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      store.dispatch(setState(state));
+    });
   }
 };

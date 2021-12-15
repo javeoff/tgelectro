@@ -5,6 +5,7 @@ export enum PageName {
   GUARANTEES = 'guarantees',
   FOR_SUPPLIERS = 'for-suppliers',
   ABOUT = 'about',
-  LOGIN = 'login',
   CONTACTS = 'contacts',
+  AUTH = 'auth',
+  ADMIN = 'admin',
 }

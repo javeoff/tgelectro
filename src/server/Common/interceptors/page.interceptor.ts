@@ -29,7 +29,7 @@ abstract class PageInterceptor implements NestInterceptor {
     const request = httpContext.getRequest<Request>();
     const response = httpContext.getResponse<Response>();
 
-    const isApi = !!request.query.api;
+    const isApi = request.url.includes('/api');
 
     if (isApi) {
       return this.formatApiResponseInterceptor.intercept(context, next);

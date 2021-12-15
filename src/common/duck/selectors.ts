@@ -1,20 +1,18 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { IRootState } from '@common/redux/store';
+import { getFeatureSelector } from '@common/redux/selectors/getFeatureSelector';
+import { Feature } from '@common/enums/Feature';
 
-export const commonSelector = createSelector(
-  (state: IRootState) => state.common,
-  (feature) => feature,
+export const commonSelector = getFeatureSelector(Feature.COMMON);
+
+export const categoriesSelector = createSelector(
+  commonSelector,
+  (feature) => feature.state.categories,
 );
 
 export const pageIdSelector = createSelector(
   commonSelector,
   (feature) => feature.state.pageId,
-);
-
-export const categoriesSelector = createSelector(
-  commonSelector,
-  (feature) => feature.state.categories,
 );
 
 export const modalIdSelector = createSelector(
