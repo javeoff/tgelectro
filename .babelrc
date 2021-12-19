@@ -4,10 +4,26 @@
   ],
   "plugins": [
     "inline-dotenv",
-    ["styled-components", { "ssr": true }],
-    ["module-resolver", {
-      "root": ["./src"]
-    }]
+    [
+      "styled-components",
+      {
+        "ssr": true
+      }
+    ],
+    [
+      "module-resolver",
+      {
+        "root": [
+          "./src"
+        ]
+      }
+    ],
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ]
   ],
   "env": {
     "test": {

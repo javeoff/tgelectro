@@ -10,16 +10,19 @@ import { createWrapper } from 'next-redux-wrapper';
 import { commonSlice } from '@common/duck/slice';
 import { catalogSlice } from '@pages/index/components/Catalog/duck/slice';
 import { Feature } from '@common/enums/Feature';
+import { adminSlice } from '@pages/admin/duck/slice';
 
 const reducer = {
   [Feature.COMMON]: commonSlice.reducer,
   // [Feature.AUTH]: authSlice.reducer,
   [Feature.CATALOG]: catalogSlice.reducer,
+  [Feature.ADMIN]: adminSlice.reducer,
 };
 
 export const setStates = {
   [Feature.COMMON]: commonSlice.actions.setState,
   [Feature.CATALOG]: catalogSlice.actions.setState,
+  [Feature.ADMIN]: adminSlice.actions.setState,
 };
 
 export type IRootState = StateFromReducersMapObject<typeof reducer>;

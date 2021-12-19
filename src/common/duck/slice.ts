@@ -7,6 +7,7 @@ import { createFeatureSlice } from '@common/redux/utils/createFeatureSlice';
 import { IBaseFeatureState } from '@common/redux/types/IBaseFeatureState';
 import { Feature } from '@common/enums/Feature';
 import { ICategory } from '@server/Categories/types/ICategory';
+import { IPopup } from '@components/Popup/types/IPopup';
 
 export interface ICommonProps {
   pageId: PageName;
@@ -16,6 +17,7 @@ export interface ICommonProps {
 export interface ICommon {
   modalId: ModalType | undefined;
   defaultModalInputValue: string;
+  popups: IPopup[];
 }
 
 type ICommonState = ICommon & IBaseFeatureState<ICommonProps>;
@@ -28,6 +30,7 @@ export const commonSlice = createFeatureSlice({
       categories: [],
     },
     modalId: undefined,
+    popups: [],
     defaultModalInputValue: '',
   } as ICommonState,
   reducers: {
@@ -39,6 +42,11 @@ export const commonSlice = createFeatureSlice({
     },
     setDefaultModalInputValue: (draft, { payload }: PayloadAction<string>) => {
       draft.defaultModalInputValue = payload;
+    },
+    addPopup: (draft, { payload }: PayloadAction<IPopup>) => {
+      // eslint-disable-next-line no-console
+      console.log('aaa');
+      draft.popups = [...draft.popups, payload];
     },
   },
 });

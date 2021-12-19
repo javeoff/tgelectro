@@ -8,4 +8,5 @@ export enum PageName {
   CONTACTS = 'contacts',
   AUTH = 'auth',
   ADMIN = 'admin',
+  ADMIN_EDIT = 'admin/edit',
 }

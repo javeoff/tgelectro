@@ -12,6 +12,7 @@ import { CategoriesFetcher } from '@server/Categories/services/categories.fetche
 import { AuthModule } from '@server/Auth/auth.module';
 import { UsersModule } from '@server/Users/users.module';
 import { SystemErrorModule } from '@server/SystemError/SystemErrorModule';
+import { AdminModule } from '@server/Admin/admin.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SystemErrorModule } from '@server/SystemError/SystemErrorModule';
     AuthModule,
     UsersModule,
     SystemErrorModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [FabricatorsFetcher, CategoriesFetcher],

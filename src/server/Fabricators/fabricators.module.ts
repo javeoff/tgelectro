@@ -7,6 +7,6 @@ import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Fabricator])],
   providers: [FabricatorsFetcher],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, FabricatorsFetcher],
 })
 export class FabricatorsModule {}

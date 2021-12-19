@@ -24,3 +24,8 @@ export const defaultModalInputValueSelector = createSelector(
   commonSelector,
   (feature) => feature.defaultModalInputValue,
 );
+
+export const popupsSelector = createSelector(
+  commonSelector,
+  (feature) => feature.popups,
+);

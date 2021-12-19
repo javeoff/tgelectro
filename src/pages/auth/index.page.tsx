@@ -1,15 +1,19 @@
 import { NextPage } from 'next';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { Input } from '@components/Input/Input';
 import { siteName } from '@common/utils/constants';
 import { Button } from '@components/Button/Button';
 import { apiAuth } from '@pages/auth/api/ApiAuth';
+import {
+  IWithAuthPageState,
+  withAuthPageState,
+} from '@pages/auth/hocs/withAuthPageState';
 
-const AuthPage: NextPage = () => {
+const AuthPage: NextPage<IWithAuthPageState> = ({ addPopup }) => {
   const router = useRouter();
   const [formData, setFormData] = useState<{ login: string; password: string }>(
     {
@@ -19,22 +23,36 @@ const AuthPage: NextPage = () => {
   );
 
   const onLogin = async (): Promise<void> => {
-    if (!formData.login || !formData.password) {
+    if (!formData.password || !formData.login) {
+      addPopup({
+        title: 'Ошибка авторизации',
+        description: 'Проверьте, ввели ли вы логин и пароль в поля',
+      });
+
       return;
     }
 
     try {
-      // eslint-disable-next-line no-console
-      console.log('Авторизация fdfsdf');
       await apiAuth.login(formData);
-
-      // eslint-disable-next-line no-console
-      console.log('Авторизация прошла');
 
       await router.push('/admin');
     } catch (error) {
+      addPopup({
+        title: 'Ошибка авторизации',
+        description: (error as Error).message,
+      });
       // eslint-disable-next-line no-console
       console.log(error);
+    }
+  };
+
+  const onEnterPress = async (
+    e: KeyboardEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+
+      await onLogin();
     }
   };
 
@@ -49,6 +67,7 @@ const AuthPage: NextPage = () => {
               type='text'
               placeholder='Ваш логин'
               defaultValue={formData.login}
+              onKeyPress={onEnterPress}
               onChange={(event) =>
                 setFormData({ ...formData, login: event.currentTarget.value })
               }
@@ -66,6 +85,7 @@ const AuthPage: NextPage = () => {
                   password: event.currentTarget.value,
                 })
               }
+              onKeyPress={onEnterPress}
             />
           </SInput>
           <SButton>
@@ -94,4 +114,4 @@ const SButton = styled.div`
   margin-top: 30px;
 `;
 
-export default AuthPage;
+export default withAuthPageState(AuthPage);

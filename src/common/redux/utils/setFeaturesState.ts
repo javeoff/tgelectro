@@ -9,6 +9,10 @@ export const setFeaturesState = (
   appProps: IBasePageResponse | IPageProps,
   store: EnhancedStore<IRootState>,
 ): void => {
+  if (!appProps) {
+    return;
+  }
+
   if ('features' in appProps) {
     Object.keys(appProps.features || {}).forEach((feature) => {
       const setState = setStates[feature as Feature];

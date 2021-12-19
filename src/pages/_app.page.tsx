@@ -9,6 +9,7 @@ import { IAppContext } from '@common/types/next/IAppContext';
 import { IAppInitialProps } from '@common/types/next/IAppInitialProps';
 import { IAppProps } from '@common/types/next/IAppProps';
 import { setFeaturesState } from '@common/redux/utils/setFeaturesState';
+import { Popup } from '@components/Popup/Popup';
 
 type INextApp = FC<IAppProps> & {
   getInitialProps?(context: IAppContext): Promise<IAppInitialProps>;
@@ -17,9 +18,10 @@ type INextApp = FC<IAppProps> & {
 const App: INextApp = ({ Component, pageProps }) => (
   <>
     <Head>
-      <title>{pageProps.title}</title>
-      <style>{pageProps.style}</style>
+      <title>{pageProps?.title}</title>
+      <style>{pageProps?.style}</style>
     </Head>
+    <Popup />
     <Modal />
     <Component {...pageProps} />
   </>

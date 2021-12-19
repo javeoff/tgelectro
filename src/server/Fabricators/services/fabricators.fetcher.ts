@@ -9,10 +9,22 @@ import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
 export class FabricatorsFetcher {
   public constructor(
     @InjectRepository(Fabricator)
-    private fabricatorsRepository: Repository<Fabricator>,
+    private readonly fabricatorsRepository: Repository<Fabricator>,
   ) {}
+
+  public getItem(id: number): Promise<IFabricator> {
+    return this.fabricatorsRepository.findOneOrFail({ id });
+  }
 
   public fetch(): Promise<IFabricator[]> {
     return this.fabricatorsRepository.find();
+  }
+
+  public getLength(): Promise<number> {
+    return this.fabricatorsRepository.count();
+  }
+
+  public update(entity: Fabricator): Promise<Fabricator> {
+    return this.fabricatorsRepository.save(entity);
   }
 }

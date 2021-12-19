@@ -10,9 +10,4 @@ export class AuthPageController {
   public authPage(): EmptyObject {
     return {};
   }
-
-  @Page(PageName.ADMIN, true)
-  public adminPage(): EmptyObject {
-    return {};
-  }
 }
