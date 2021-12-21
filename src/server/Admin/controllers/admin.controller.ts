@@ -13,6 +13,7 @@ import { AdminRoute } from '@server/Admin/enums/AdminRoute';
 import { SaveItemRequest } from '@server/Admin/dto/SaveItemRequest';
 import { getListNameByListType } from '@common/utils/getListNameByListType';
 import { DeleteItemRequest } from '@server/Admin/dto/DeleteItemRequest';
+import { CreateItemRequest } from '@server/Admin/dto/CreateItemRequest';
 
 @Controller()
 export class AdminController {
@@ -68,6 +69,14 @@ export class AdminController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Page(PageName.ADMIN_CREATE)
+  public adminCreatePage(@Query() query: { type: TItemType }): unknown {
+    return {
+      type: query.type,
+    };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @ApiPost(AdminRoute.SAVE)
   public async saveItem(@Body() dto: SaveItemRequest): Promise<void> {
     await this.adminService.update(dto);
@@ -77,5 +86,11 @@ export class AdminController {
   @ApiPost(AdminRoute.DELETE)
   public async deleteItem(@Body() dto: DeleteItemRequest): Promise<void> {
     await this.adminService.delete(dto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @ApiPost(AdminRoute.CREATE)
+  public async createItem(@Body() dto: CreateItemRequest): Promise<void> {
+    await this.adminService.create(dto);
   }
 }

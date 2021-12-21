@@ -9,4 +9,5 @@ export enum PageName {
   AUTH = 'auth',
   ADMIN = 'admin',
   ADMIN_EDIT = 'admin/edit',
+  ADMIN_CREATE = 'admin/create',
 }

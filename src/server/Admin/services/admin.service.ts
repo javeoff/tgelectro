@@ -13,6 +13,8 @@ import { Category } from '@server/Categories/entities/category.entity';
 import { Product } from '@server/Products/entities/product.entity';
 import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
 import { DeleteItemRequest } from '@server/Admin/dto/DeleteItemRequest';
+import { CreateItemRequest } from '@server/Admin/dto/CreateItemRequest';
+import { getListNameByListType } from '@common/utils/getListNameByListType';
 
 interface ILists {
   [ListName.PRODUCTS]: IProduct[];
@@ -85,6 +87,18 @@ export class AdminService {
         return this.fabricatorsFetcher.remove(
           await this.fabricatorsFetcher.getItem(Number(dto.id)),
         );
+    }
+  }
+
+  public create(dto: CreateItemRequest): unknown {
+    switch (dto.itemType) {
+      case ListName.PRODUCTS:
+      default:
+        return this.productsFetcher.create(dto.item);
+      case ListName.CATEGORIES:
+        return this.categoriesFetcher.create(dto.item);
+      case ListName.FABRICATORS:
+        return this.fabricatorsFetcher.create(dto.item);
     }
   }
 }

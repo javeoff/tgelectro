@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common/decorators';
-import { Repository } from 'typeorm';
+import { DeepPartial, InsertResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { IProduct } from '@server/Products/types/IProduct';
@@ -30,5 +30,9 @@ export class ProductsFetcher {
 
   public remove(entity: Product): Promise<Product> {
     return this.productRepository.remove(entity);
+  }
+
+  public create(entity: DeepPartial<Product>): Promise<InsertResult> {
+    return this.productRepository.insert(entity);
   }
 }

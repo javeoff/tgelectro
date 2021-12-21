@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common/decorators';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeepPartial, InsertResult, Repository } from 'typeorm';
 
 import { IFabricator } from '@server/Fabricators/types/IFabricator';
 import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
@@ -30,5 +30,9 @@ export class FabricatorsFetcher {
 
   public remove(entity: Fabricator): Promise<Fabricator> {
     return this.fabricatorsRepository.remove(entity);
+  }
+
+  public create(entity: DeepPartial<Fabricator>): Promise<InsertResult> {
+    return this.fabricatorsRepository.insert(entity);
   }
 }

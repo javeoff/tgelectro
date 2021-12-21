@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeepPartial, InsertResult, Repository } from 'typeorm';
 
 import { Category } from '@server/Categories/entities/category.entity';
 import { ICategory } from '@server/Categories/types/ICategory';
@@ -30,5 +30,9 @@ export class CategoriesFetcher {
 
   public remove(entity: Category): Promise<Category> {
     return this.categoriesRepository.remove(entity);
+  }
+
+  public create(entity: DeepPartial<Category>): Promise<InsertResult> {
+    return this.categoriesRepository.insert(entity);
   }
 }
