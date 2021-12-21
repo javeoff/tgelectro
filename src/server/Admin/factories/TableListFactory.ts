@@ -70,7 +70,7 @@ export class TableListFactory {
           [
             {
               url: '#',
-              text: `${product.vendor} (${product.alternativeVendor}}`,
+              text: `${product.vendor} (${product.alternativeVendor})`,
             },
           ],
           product.price,

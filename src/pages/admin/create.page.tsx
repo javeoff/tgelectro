@@ -15,12 +15,19 @@ import { Sidebar } from '@pages/admin/components/Sidebar/Sidebar';
 import { CreateItemRequest } from '@server/Admin/dto/CreateItemRequest';
 import { createAdminPageApi } from '@pages/admin/api/CreateAdminPageApi';
 import { ListName } from '@pages/admin/enums/ListName';
+import {
+  IWithCreateAdminPageState,
+  withCreateAdminPageState,
+} from '@pages/admin/hocs/withCreateAdminPageState';
 
 interface IProps {
   type?: ListName;
 }
 
-const CreatePage: NextPage<IProps> = ({ type }) => {
+const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
+  type,
+  addPopup,
+}) => {
   const getInitialValuesState = (): Record<string, Primitive> => {
     switch (type) {
       case 'products':
@@ -64,6 +71,21 @@ const CreatePage: NextPage<IProps> = ({ type }) => {
   };
 
   const onSaveData = async (): Promise<void> => {
+    const values = Object.values(valuesState);
+
+    const isValid = values
+      .filter((value) => !['imageUrl'].includes(String(value)))
+      .every((value) => String(value) !== '');
+
+    if (!isValid) {
+      addPopup({
+        title: 'Ошибка создания',
+        description: 'Поля заполнены неверно',
+      });
+
+      return;
+    }
+
     const request = new CreateItemRequest();
 
     request.itemType = type;
@@ -73,6 +95,7 @@ const CreatePage: NextPage<IProps> = ({ type }) => {
       itemType: type,
       item: valuesState,
     });
+
     router.back();
   };
 
@@ -113,7 +136,7 @@ const CreatePage: NextPage<IProps> = ({ type }) => {
   );
 };
 
-export default CreatePage;
+export default withCreateAdminPageState(CreatePage);
 
 const SFormWrapper = styled.div`
   & > * {
