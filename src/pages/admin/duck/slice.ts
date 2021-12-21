@@ -25,5 +25,8 @@ export const adminSlice = createFeatureSlice({
     setActiveList: (draft, { payload }: PayloadAction<ListName>) => {
       draft.state.activeList = payload;
     },
+    setLists: (draft, { payload }: PayloadAction<Record<ListName, IRow[]>>) => {
+      draft.state.lists = payload;
+    },
   },
 });

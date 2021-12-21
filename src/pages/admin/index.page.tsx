@@ -4,35 +4,45 @@ import styled from 'styled-components';
 
 import { Table } from '@pages/admin/components/Table/Table';
 import { Sidebar } from '@pages/admin/components/Sidebar/Sidebar';
-import { IWithAdminPageState, withAdminPageState } from '@pages/admin/hocs/withAdminPageState';
-import { ListName } from '@pages/admin/enums/ListName';
+import {
+  IWithAdminPageState,
+  withAdminPageState,
+} from '@pages/admin/hocs/withAdminPageState';
+import { IRow } from '@pages/admin/components/Table/types/IRow';
 
-interface IProps {
-  activeItem?: ListName;
-}
-
-const AdminPage: NextPage<IProps & IWithAdminPageState> = ({
+const AdminPage: NextPage<IWithAdminPageState> = ({
   lists,
+  setLists,
   activeList,
-}) => (
-  <>
-    <Container>
-      <h1>Admin page</h1>
-      <SContent>
-        <Row>
-          <Col md={4} sm={6} xs={12} lg={3}>
-            <SListGroup>
-              <Sidebar />
-            </SListGroup>
-          </Col>
-          <Col>
-            <Table rows={lists[activeList]} />
-          </Col>
-        </Row>
-      </SContent>
-    </Container>
-  </>
-);
+}) => {
+  const setRows = (rows: IRow[]): void => {
+    setLists({ ...lists, [activeList]: rows });
+  };
+
+  return (
+    <>
+      <Container>
+        <h1>Admin page</h1>
+        <SContent>
+          <Row>
+            <Col md={4} sm={6} xs={12} lg={3}>
+              <SListGroup>
+                <Sidebar />
+              </SListGroup>
+            </Col>
+            <Col>
+              <Table
+                rows={lists[activeList]}
+                setRows={setRows}
+                activeList={activeList}
+              />
+            </Col>
+          </Row>
+        </SContent>
+      </Container>
+    </>
+  );
+};
 
 export default withAdminPageState(AdminPage);
 

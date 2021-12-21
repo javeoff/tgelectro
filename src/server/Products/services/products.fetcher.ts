@@ -27,4 +27,8 @@ export class ProductsFetcher {
   public update(entity: Product): Promise<Product> {
     return this.productRepository.save(entity);
   }
+
+  public remove(entity: Product): Promise<Product> {
+    return this.productRepository.remove(entity);
+  }
 }

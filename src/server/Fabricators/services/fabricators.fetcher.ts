@@ -27,4 +27,8 @@ export class FabricatorsFetcher {
   public update(entity: Fabricator): Promise<Fabricator> {
     return this.fabricatorsRepository.save(entity);
   }
+
+  public remove(entity: Fabricator): Promise<Fabricator> {
+    return this.fabricatorsRepository.remove(entity);
+  }
 }

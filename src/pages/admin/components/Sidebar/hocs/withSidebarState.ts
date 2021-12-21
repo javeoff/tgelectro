@@ -2,7 +2,10 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { IRootState } from '@common/redux/store';
 import { adminSlice } from '@pages/admin/duck/slice';
-import { activeListSelector, listLengthSelector } from '@pages/admin/duck/selectors';
+import {
+  activeListSelector,
+  listLengthSelector,
+} from '@pages/admin/duck/selectors';
 
 export const withSidebarState = connect(
   (state: IRootState) => ({

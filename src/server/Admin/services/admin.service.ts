@@ -12,6 +12,7 @@ import { SaveItemRequest } from '@server/Admin/dto/SaveItemRequest';
 import { Category } from '@server/Categories/entities/category.entity';
 import { Product } from '@server/Products/entities/product.entity';
 import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
+import { DeleteItemRequest } from '@server/Admin/dto/DeleteItemRequest';
 
 interface ILists {
   [ListName.PRODUCTS]: IProduct[];
@@ -28,7 +29,7 @@ export class AdminService {
   ) {}
 
   public getService(
-    listType: TItemType,
+    listType: TItemType | ListName,
   ): FabricatorsFetcher | ProductsFetcher | CategoriesFetcher {
     switch (listType) {
       case 'product':
@@ -57,18 +58,6 @@ export class AdminService {
     };
   }
 
-  public getListNameByListType(listType: TItemType): ListName {
-    switch (listType) {
-      default:
-      case 'product':
-        return ListName.PRODUCTS;
-      case 'category':
-        return ListName.CATEGORIES;
-      case 'fabricator':
-        return ListName.FABRICATORS;
-    }
-  }
-
   public update(dto: SaveItemRequest): Promise<unknown> {
     switch (dto.itemType) {
       case 'product':
@@ -78,6 +67,24 @@ export class AdminService {
         return this.categoriesFetcher.update(dto.item as Category);
       case 'fabricator':
         return this.fabricatorsFetcher.update(dto.item as Fabricator);
+    }
+  }
+
+  public async delete(dto: DeleteItemRequest): Promise<unknown> {
+    switch (dto.itemType) {
+      case ListName.PRODUCTS:
+      default:
+        return this.productsFetcher.remove(
+          await this.productsFetcher.getItem(Number(dto.id)),
+        );
+      case ListName.CATEGORIES:
+        return this.categoriesFetcher.remove(
+          await this.categoriesFetcher.getItem(Number(dto.id)),
+        );
+      case ListName.FABRICATORS:
+        return this.fabricatorsFetcher.remove(
+          await this.fabricatorsFetcher.getItem(Number(dto.id)),
+        );
     }
   }
 }

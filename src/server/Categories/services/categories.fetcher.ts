@@ -27,4 +27,8 @@ export class CategoriesFetcher {
   public update(entity: Category): Promise<Category> {
     return this.categoriesRepository.save(entity);
   }
+
+  public remove(entity: Category): Promise<Category> {
+    return this.categoriesRepository.remove(entity);
+  }
 }

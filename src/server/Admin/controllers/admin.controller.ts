@@ -11,6 +11,8 @@ import { TItemType } from '@server/Admin/types/TItemType';
 import { ApiPost } from '@server/Common/decorators/ApiPost';
 import { AdminRoute } from '@server/Admin/enums/AdminRoute';
 import { SaveItemRequest } from '@server/Admin/dto/SaveItemRequest';
+import { getListNameByListType } from '@common/utils/getListNameByListType';
+import { DeleteItemRequest } from '@server/Admin/dto/DeleteItemRequest';
 
 @Controller()
 export class AdminController {
@@ -58,7 +60,7 @@ export class AdminController {
     const subjectService = this.adminService.getService(query.type);
 
     return {
-      activeList: this.adminService.getListNameByListType(query.type),
+      activeList: getListNameByListType(query.type),
       type: query.type,
       id: query.id,
       item: await subjectService.getItem(Number(query.id)),
@@ -69,5 +71,11 @@ export class AdminController {
   @ApiPost(AdminRoute.SAVE)
   public async saveItem(@Body() dto: SaveItemRequest): Promise<void> {
     await this.adminService.update(dto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @ApiPost(AdminRoute.DELETE)
+  public async deleteItem(@Body() dto: DeleteItemRequest): Promise<void> {
+    await this.adminService.delete(dto);
   }
 }

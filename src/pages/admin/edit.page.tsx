@@ -6,7 +6,10 @@ import styled from 'styled-components';
 
 import { Input } from '@components/Input/Input';
 import { Button } from '@components/Button/Button';
-import { editItemTranslation, fieldTypeTranslation } from '@pages/admin/utils/translation';
+import {
+  editItemTranslation,
+  fieldTypeTranslation,
+} from '@pages/admin/utils/translation';
 import { Sidebar } from '@pages/admin/components/Sidebar/Sidebar';
 import { editAdminPageApi } from '@pages/admin/api/EditAdminPageApi';
 import { SaveItemRequest } from '@server/Admin/dto/SaveItemRequest';
@@ -14,8 +17,6 @@ import { TItemType } from '@server/Admin/types/TItemType';
 import { IProduct } from '@server/Products/types/IProduct';
 import { IFabricator } from '@server/Fabricators/types/IFabricator';
 import { ICategory } from '@server/Categories/types/ICategory';
-
-type TUnionSubject = IProduct | ICategory | IFabricator;
 
 interface IProps {
   type?: TItemType;
@@ -31,10 +32,7 @@ const EditPage: NextPage<IProps> = ({ type, id, item }) => {
     return null;
   }
 
-  const onInputChange = (
-    value: string,
-    valuesKey: keyof TUnionSubject,
-  ): void => {
+  const onInputChange = (value: string, valuesKey: string): void => {
     void setValuesState({
       ...valuesState,
       [valuesKey]: value,

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common/decorators';
 
 import { IFabricator } from '@server/Fabricators/types/IFabricator';
-import { IRow, IRowLink, IValue } from '@pages/admin/components/Table/types/IRow';
+import { IRow, IValue } from '@pages/admin/components/Table/types/IRow';
 import { IProduct } from '@server/Products/types/IProduct';
 import { ICategory } from '@server/Categories/types/ICategory';
+import { ILink } from '@pages/admin/components/Table/types/ILink';
 
 type TItemType = 'product' | 'category' | 'fabricator';
 
@@ -79,11 +80,19 @@ export class TableListFactory {
     ];
   }
 
-  private getLinks: (itemId: number, itemType: TItemType) => IRowLink[] = (
+  private getLinks: (itemId: number, itemType: TItemType) => ILink[] = (
     itemId,
     itemType,
   ) => [
-    { url: `admin/edit?type=${itemType}&id=${itemId}`, text: 'Редактировать' },
-    { url: `admin/delete?type=${itemType}&id=${itemId}`, text: 'Удалить' },
+    {
+      id: String(itemId),
+      url: `admin/edit?type=${itemType}&id=${itemId}`,
+      text: 'Редактировать',
+    },
+    {
+      id: String(itemId),
+      action: 'delete',
+      text: 'Удалить',
+    },
   ];
 }

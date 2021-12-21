@@ -4,7 +4,10 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
 import { ListName } from '@pages/admin/enums/ListName';
-import { IWithSidebarState, withSidebarState } from '@pages/admin/components/Sidebar/hocs/withSidebarState';
+import {
+  IWithSidebarState,
+  withSidebarState,
+} from '@pages/admin/components/Sidebar/hocs/withSidebarState';
 
 const sidebarState = [
   {
@@ -40,13 +43,13 @@ const SidebarComponent: FC<IProps & IWithSidebarState> = ({
           <ListGroupItem
             action={false}
             onClick={async () => {
+              // eslint-disable-next-line no-console
+              console.log(listType);
+              setActiveList(listType);
+
               if (redirect) {
                 await router.push(`/admin?activeItem=${listType}`);
-
-                return;
               }
-
-              setActiveList(listType);
             }}
             active={activeList === listType}
             tag='a'
