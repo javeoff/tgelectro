@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Table as TableComponent } from 'reactstrap';
-import styled from 'styled-components';
 import Link from 'next/link';
 import produce from 'immer';
+import styled from 'styled-components';
 
 import { IRow } from '@pages/admin/components/Table/types/IRow';
 import { ListName } from '@pages/admin/enums/ListName';
@@ -63,24 +63,26 @@ export const Table: FC<IProps> = ({ rows, setRows, activeList }) => {
                   {row.values.map((value, valueIdx) =>
                     Array.isArray(value) ? (
                       <td key={valueIdx + rowIdx + 1}>
-                        {value.map((link, idx) =>
-                          link?.action === 'delete' ? (
-                            <SLink key={idx}>
-                              <div
-                                role='none'
-                                onClick={() => deleteTableItem(link.id)}
-                              >
-                                {link.text}
-                              </div>
-                            </SLink>
-                          ) : (
-                            link?.url && (
-                              <SLink key={idx}>
-                                <Link href={link.url}>{link.text}</Link>
+                        <SRow>
+                          {value.map((link, idx) =>
+                            link?.action === 'delete' ? (
+                              <SLink key={idx} color='red'>
+                                <div
+                                  role='none'
+                                  onClick={() => deleteTableItem(link.id)}
+                                >
+                                  {link.text}
+                                </div>
                               </SLink>
-                            )
-                          ),
-                        )}
+                            ) : (
+                              link?.url && (
+                                <SLink key={idx}>
+                                  <Link href={link.url}>{link.text}</Link>
+                                </SLink>
+                              )
+                            ),
+                          )}
+                        </SRow>
                       </td>
                     ) : (
                       <td key={valueIdx}>{value}</td>
@@ -107,6 +109,14 @@ const STable = styled.div`
     display: none;
   }
 `;
-const SLink = styled.span`
+const SRow = styled.div`
+  display: flex;
+`;
+const SLink = styled.span<{ color?: string }>`
   margin-left: 10px;
+  display: flex;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  ${({ color }) => color && `color: ${color};`}
 `;
