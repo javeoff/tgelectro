@@ -58,6 +58,7 @@
     "rxjs": "^7.4.0",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.3",
+    "transliterate-cyrillic-text-to-latin-url": "^1.1.1",
     "typeorm": "^0.2.41",
     "typeorm-naming-strategies": "^2.0.0",
     "url-loader": "^4.1.1"

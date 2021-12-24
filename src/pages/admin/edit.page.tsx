@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Col, Container, Row } from 'reactstrap';
 import styled from 'styled-components';
+import convertToUrl from 'transliterate-cyrillic-text-to-latin-url';
 
 import { Input } from '@components/Input/Input';
 import { Button } from '@components/Button/Button';
@@ -36,12 +37,28 @@ const EditPage: NextPage<IProps & IWithEditAdminPageState> = ({
 }) => {
   const [valuesState, setValuesState] = useState(item);
   const router = useRouter();
+  const linkIsAutoEditable = useRef(true);
 
   if (!item || !type || !id) {
     return null;
   }
 
-  const onInputChange = (value: unknown, valuesKey: string): void => {
+  const onInputChange = (value: string, valuesKey: string): void => {
+    if (
+      value !== '' &&
+      !('price' in valuesState) &&
+      valuesKey === 'name' &&
+      linkIsAutoEditable.current
+    ) {
+      void setValuesState({
+        ...valuesState,
+        link: convertToUrl(value),
+        name: value,
+      });
+
+      return;
+    }
+
     void setValuesState({
       ...valuesState,
       [valuesKey]: value,
@@ -111,7 +128,7 @@ const EditPage: NextPage<IProps & IWithEditAdminPageState> = ({
                       <Input
                         disabled={false}
                         isFluid={true}
-                        defaultValue={(valuesState as IProduct)[key].id}
+                        defaultValue={(valuesState as IProduct)[key]?.id}
                         onChange={(e) =>
                           onInputChange(
                             {
@@ -126,10 +143,24 @@ const EditPage: NextPage<IProps & IWithEditAdminPageState> = ({
                       <Input
                         disabled={key === 'id'}
                         isFluid={true}
-                        defaultValue={valuesState[key]}
+                        value={valuesState[key]}
                         onChange={(e) =>
                           onInputChange(e.currentTarget.value, key)
                         }
+                        onBlur={(e) => {
+                          // eslint-disable-next-line no-console
+                          console.log(
+                            key === 'link',
+                            e.currentTarget.value === '',
+                          );
+                          if (key === 'link' && e.currentTarget.value === '') {
+                            linkIsAutoEditable.current = true;
+                          }
+
+                          if (key === 'name') {
+                            linkIsAutoEditable.current = false;
+                          }
+                        }}
                       />
                     )}
                   </SInput>

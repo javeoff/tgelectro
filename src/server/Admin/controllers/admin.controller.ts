@@ -60,6 +60,9 @@ export class AdminController {
   ): Promise<unknown> {
     const subjectService = this.adminService.getService(query.type);
 
+    // eslint-disable-next-line no-console
+    console.log( await subjectService.getItem(Number(query.id)));
+
     return {
       activeList: getListNameByListType(query.type),
       type: query.type,

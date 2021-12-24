@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Col, Container, Row } from 'reactstrap';
 import styled from 'styled-components';
 import { Primitive } from 'type-fest';
+import convertToUrl from 'transliterate-cyrillic-text-to-latin-url';
 
 import { Input } from '@components/Input/Input';
 import { Button } from '@components/Button/Button';
@@ -21,6 +22,7 @@ import {
 } from '@pages/admin/hocs/withCreateAdminPageState';
 import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
 import { Category } from '@server/Categories/entities/category.entity';
+
 
 interface IProps {
   type?: ListName;
@@ -62,12 +64,28 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
     Record<string, Primitive | Category | Fabricator>
   >(getInitialValuesState());
   const router = useRouter();
+  const linkIsAutoEditable = useRef(true);
 
   if (!type) {
     return null;
   }
 
   const onInputChange = (value: string, valuesKey: string): void => {
+    if (
+      value !== '' &&
+      !('price' in valuesState) &&
+      valuesKey === 'name' &&
+      linkIsAutoEditable.current
+    ) {
+      void setValuesState({
+        ...valuesState,
+        link: convertToUrl(value),
+        name: value,
+      });
+
+      return;
+    }
+
     void setValuesState({
       ...valuesState,
       [valuesKey]: value,
@@ -91,8 +109,9 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
     }
 
     try {
-      valuesState.category = await createAdminPageApi
-        .getCategory((valuesState.category as string) || '')
+      valuesState.category = await createAdminPageApi.getCategory(
+        (valuesState.category as string) || '',
+      );
     } catch {
       addPopup({
         title: 'Ошибка создания',
@@ -149,10 +168,19 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
                     <Input
                       disabled={key === 'id'}
                       isFluid={true}
-                      defaultValue={String(valuesState[key])}
-                      onChange={(e) =>
-                        onInputChange(e.currentTarget.value, key)
-                      }
+                      value={String(valuesState[key])}
+                      onChange={(e) => {
+                        onInputChange(e.currentTarget.value, key);
+                      }}
+                      onBlur={(e) => {
+                        if (key === 'link' && e.currentTarget.value === '') {
+                          linkIsAutoEditable.current = true;
+                        }
+
+                        if (key === 'name') {
+                          linkIsAutoEditable.current = false;
+                        }
+                      }}
                     />
                   </SInput>
                 ))}
