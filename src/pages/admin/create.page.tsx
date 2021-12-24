@@ -19,6 +19,8 @@ import {
   IWithCreateAdminPageState,
   withCreateAdminPageState,
 } from '@pages/admin/hocs/withCreateAdminPageState';
+import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
+import { Category } from '@server/Categories/entities/category.entity';
 
 interface IProps {
   type?: ListName;
@@ -34,6 +36,8 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
         return {
           vendor: '',
           alternativeVendor: '',
+          category: '',
+          fabricator: '',
           imageUrl: '',
           description: '',
           price: 0,
@@ -54,9 +58,9 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
     }
   };
 
-  const [valuesState, setValuesState] = useState<Record<string, Primitive>>(
-    getInitialValuesState(),
-  );
+  const [valuesState, setValuesState] = useState<
+    Record<string, Primitive | Category | Fabricator>
+  >(getInitialValuesState());
   const router = useRouter();
 
   if (!type) {
@@ -81,6 +85,31 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
       addPopup({
         title: 'Ошибка создания',
         description: 'Поля заполнены неверно',
+      });
+
+      return;
+    }
+
+    try {
+      valuesState.category = await createAdminPageApi
+        .getCategory((valuesState.category as string) || '')
+    } catch {
+      addPopup({
+        title: 'Ошибка создания',
+        description: 'Категория не найдена',
+      });
+
+      return;
+    }
+
+    try {
+      valuesState.fabricator = await createAdminPageApi.getFabricator(
+        (valuesState.fabricator as string) || '',
+      );
+    } catch {
+      addPopup({
+        title: 'Ошибка создания',
+        description: 'Производитель не найден',
       });
 
       return;

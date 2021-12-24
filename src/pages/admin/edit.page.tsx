@@ -17,6 +17,10 @@ import { TItemType } from '@server/Admin/types/TItemType';
 import { IProduct } from '@server/Products/types/IProduct';
 import { IFabricator } from '@server/Fabricators/types/IFabricator';
 import { ICategory } from '@server/Categories/types/ICategory';
+import {
+  IWithEditAdminPageState,
+  withEditAdminPageState,
+} from '@pages/admin/hocs/withEditAdminPageState';
 
 interface IProps {
   type?: TItemType;
@@ -24,7 +28,12 @@ interface IProps {
   item: IProduct | ICategory | IFabricator;
 }
 
-const EditPage: NextPage<IProps> = ({ type, id, item }) => {
+const EditPage: NextPage<IProps & IWithEditAdminPageState> = ({
+  type,
+  id,
+  item,
+  addPopup,
+}) => {
   const [valuesState, setValuesState] = useState(item);
   const router = useRouter();
 
@@ -32,7 +41,7 @@ const EditPage: NextPage<IProps> = ({ type, id, item }) => {
     return null;
   }
 
-  const onInputChange = (value: string, valuesKey: string): void => {
+  const onInputChange = (value: unknown, valuesKey: string): void => {
     void setValuesState({
       ...valuesState,
       [valuesKey]: value,
@@ -41,6 +50,36 @@ const EditPage: NextPage<IProps> = ({ type, id, item }) => {
 
   const onSaveData = async (): Promise<void> => {
     const request = new SaveItemRequest();
+
+    if ('category' in valuesState) {
+      try {
+        valuesState.category = await editAdminPageApi.getCategory(
+          String(valuesState.category.id) || '',
+        );
+      } catch {
+        addPopup({
+          title: 'Ошибка создания',
+          description: 'Категория не найдена',
+        });
+
+        return;
+      }
+    }
+
+    if ('fabricator' in valuesState) {
+      try {
+        valuesState.fabricator = await editAdminPageApi.getFabricator(
+          String(valuesState.fabricator.id) || '',
+        );
+      } catch {
+        addPopup({
+          title: 'Ошибка создания',
+          description: 'Производитель не найден',
+        });
+
+        return;
+      }
+    }
 
     request.itemType = type;
     request.id = id;
@@ -68,14 +107,31 @@ const EditPage: NextPage<IProps> = ({ type, id, item }) => {
                     <div>
                       {fieldTypeTranslation[key]} {editItemTranslation[type]}
                     </div>
-                    <Input
-                      disabled={key === 'id'}
-                      isFluid={true}
-                      defaultValue={valuesState[key]}
-                      onChange={(e) =>
-                        onInputChange(e.currentTarget.value, key)
-                      }
-                    />
+                    {key === 'fabricator' || key === 'category' ? (
+                      <Input
+                        disabled={false}
+                        isFluid={true}
+                        defaultValue={(valuesState as IProduct)[key].id}
+                        onChange={(e) =>
+                          onInputChange(
+                            {
+                              ...valuesState[key],
+                              id: e.currentTarget.value,
+                            },
+                            key,
+                          )
+                        }
+                      />
+                    ) : (
+                      <Input
+                        disabled={key === 'id'}
+                        isFluid={true}
+                        defaultValue={valuesState[key]}
+                        onChange={(e) =>
+                          onInputChange(e.currentTarget.value, key)
+                        }
+                      />
+                    )}
                   </SInput>
                 ))}
               <Button onClick={onSaveData}>Сохранить данные</Button>
@@ -88,7 +144,7 @@ const EditPage: NextPage<IProps> = ({ type, id, item }) => {
   );
 };
 
-export default EditPage;
+export default withEditAdminPageState(EditPage);
 
 const SFormWrapper = styled.div`
   & > * {

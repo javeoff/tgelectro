@@ -23,8 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       token?: string;
     };
   }): string | null {
-    // eslint-disable-next-line no-console
-    console.log(req.cookies);
     if (req.cookies && 'token' in req.cookies) {
       return req.cookies.token as string;
     }

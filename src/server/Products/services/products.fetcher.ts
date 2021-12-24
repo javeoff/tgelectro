@@ -13,7 +13,12 @@ export class ProductsFetcher {
   ) {}
 
   public getItem(id: number): Promise<IProduct> {
-    return this.productRepository.findOneOrFail({ id });
+    return this.productRepository.findOneOrFail({
+      relations: ['category', 'fabricator'],
+      where: {
+        id,
+      },
+    });
   }
 
   public fetch(): Promise<IProduct[]> {

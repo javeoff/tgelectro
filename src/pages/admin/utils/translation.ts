@@ -18,11 +18,11 @@ export const fieldTypeTranslation: Record<keyof TUnionSubject, string> = {
   imageUrl: 'Изображение',
   description: 'Описание',
   price: 'Цена',
-  category: 'Категория',
-  fabricator: 'Производитель',
   name: 'Название',
   link: 'Ссылка',
   fabricators: 'Производители',
   products: 'Продукты',
   categories: 'Категории',
+  fabricator: 'Идентификатор производителя',
+  category: 'Идентификатор категории',
 };

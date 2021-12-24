@@ -44,8 +44,6 @@ export const commonSlice = createFeatureSlice({
       draft.defaultModalInputValue = payload;
     },
     addPopup: (draft, { payload }: PayloadAction<IPopup>) => {
-      // eslint-disable-next-line no-console
-      console.log('aaa');
       draft.popups = [...draft.popups, payload];
     },
   },

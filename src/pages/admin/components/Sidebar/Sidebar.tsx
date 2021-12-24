@@ -43,8 +43,6 @@ const SidebarComponent: FC<IProps & IWithSidebarState> = ({
           <ListGroupItem
             action={false}
             onClick={async () => {
-              // eslint-disable-next-line no-console
-              console.log(listType);
               setActiveList(listType);
 
               if (redirect) {

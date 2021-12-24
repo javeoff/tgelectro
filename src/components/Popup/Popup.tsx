@@ -10,8 +10,6 @@ const PopupComponent: FC<IWithPopupState> = ({ popups }) => {
   const portalElement = usePortal(true);
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(popups);
   }, [popups]);
 
   if (popups.length === 0) {

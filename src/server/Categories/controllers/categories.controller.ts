@@ -1,16 +1,16 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Query } from '@nestjs/common';
 
-import { Page } from '@server/Common/decorators/Page';
 import { CategoriesFetcher } from '@server/Categories/services/categories.fetcher';
+import { Category } from '@server/Categories/entities/category.entity';
+import { ApiGet } from '@server/Common/decorators/ApiGet';
+import { ApiRoute } from '@server/Common/enums/ApiRoute';
 
 @Controller()
 export class CategoriesController {
   public constructor(private readonly categoriesFetcher: CategoriesFetcher) {}
 
-  @Page('categories1')
-  public async categoriesPage(): Promise<unknown> {
-    return {
-      categories: await this.categoriesFetcher.fetch(),
-    };
+  @ApiGet(ApiRoute.CATEGORY)
+  public async getCategory(@Query() query: { id: string }): Promise<Category> {
+    return this.categoriesFetcher.getItem(Number(query.id));
   }
 }
