@@ -1,6 +1,9 @@
 export enum PageName {
   INDEX = 'index',
   CATEGORIES = 'categories',
+  CATEGORY = 'categories/:categoryLink',
+  FABRICATOR = 'fabricators/:fabricatorLink',
+  FABRICATOR_CATEGORY = 'fabricators/:fabricatorLink/*',
   DELIVERY = 'delivery',
   GUARANTEES = 'guarantees',
   FOR_SUPPLIERS = 'for-suppliers',
@@ -10,4 +13,6 @@ export enum PageName {
   ADMIN = 'admin',
   ADMIN_EDIT = 'admin/edit',
   ADMIN_CREATE = 'admin/create',
+  PRODUCT = 'products/:productLink',
+  SEARCH = 'search',
 }

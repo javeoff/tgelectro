@@ -1,18 +1,12 @@
-import { TItemType } from '@server/Admin/types/TItemType';
-import { IProduct } from '@server/Products/types/IProduct';
-import { ICategory } from '@server/Categories/types/ICategory';
-import { IFabricator } from '@server/Fabricators/types/IFabricator';
-
-export const editItemTranslation: Record<TItemType, string> = {
-  product: 'продукта',
-  category: 'категории',
-  fabricator: 'производителя',
+export const editItemTranslation: Record<string, string> = {
+  products: 'продукта',
+  categories: 'категории',
+  fabricators: 'производителя',
 };
 
-type TUnionSubject = IProduct & ICategory & IFabricator;
-
-export const fieldTypeTranslation: Record<keyof TUnionSubject, string> = {
+export const fieldTypeTranslation: Record<string, string> = {
   id: 'Идентификатор',
+  parentId: 'Идентификатор родителя',
   vendor: 'Артикул',
   alternativeVendor: 'Альтернативный артикул',
   imageUrl: 'Изображение',

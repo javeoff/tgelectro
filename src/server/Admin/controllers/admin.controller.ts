@@ -7,18 +7,18 @@ import { ListName } from '@pages/admin/enums/ListName';
 import { TableListFactory } from '@server/Admin/factories/TableListFactory';
 import { Feature } from '@common/enums/Feature';
 import { AdminService } from '@server/Admin/services/admin.service';
-import { TItemType } from '@server/Admin/types/TItemType';
 import { ApiPost } from '@server/Common/decorators/ApiPost';
 import { AdminRoute } from '@server/Admin/enums/AdminRoute';
 import { SaveItemRequest } from '@server/Admin/dto/SaveItemRequest';
-import { getListNameByListType } from '@common/utils/getListNameByListType';
 import { DeleteItemRequest } from '@server/Admin/dto/DeleteItemRequest';
 import { CreateItemRequest } from '@server/Admin/dto/CreateItemRequest';
+import { AdminEditFormFactory } from '@server/Admin/factories/AdminEditFormFactory';
 
 @Controller()
 export class AdminController {
   public constructor(
     private readonly tableListFactory: TableListFactory,
+    private readonly adminEditFormFactory: AdminEditFormFactory,
     private readonly adminService: AdminService,
   ) {}
 
@@ -56,24 +56,22 @@ export class AdminController {
   @UseGuards(AuthGuard('jwt'))
   @Page(PageName.ADMIN_EDIT)
   public async adminEditPage(
-    @Query() query: { type: TItemType; id: string },
+    @Query() query: { type: ListName; id: string },
   ): Promise<unknown> {
     const subjectService = this.adminService.getService(query.type);
 
-    // eslint-disable-next-line no-console
-    console.log( await subjectService.getItem(Number(query.id)));
-
     return {
-      activeList: getListNameByListType(query.type),
       type: query.type,
       id: query.id,
-      item: await subjectService.getItem(Number(query.id)),
+      item: this.adminEditFormFactory.getForm(
+        await subjectService.getItem(Number(query.id)),
+      ),
     };
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Page(PageName.ADMIN_CREATE)
-  public adminCreatePage(@Query() query: { type: TItemType }): unknown {
+  public adminCreatePage(@Query() query: { type: ListName }): unknown {
     return {
       type: query.type,
     };

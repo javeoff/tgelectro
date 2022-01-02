@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common/decorators';
-import { DeepPartial, InsertResult, Repository } from 'typeorm';
+import { InsertResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { AnyObject } from 'immer/dist/types/types-internal';
 
-import { IProduct } from '@server/Products/types/IProduct';
 import { Product } from '@server/Products/entities/product.entity';
 
 @Injectable()
@@ -12,7 +13,7 @@ export class ProductsFetcher {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  public getItem(id: number): Promise<IProduct> {
+  public getItem(id: number): Promise<Product> {
     return this.productRepository.findOneOrFail({
       relations: ['category', 'fabricator'],
       where: {
@@ -21,8 +22,24 @@ export class ProductsFetcher {
     });
   }
 
-  public fetch(): Promise<IProduct[]> {
-    return this.productRepository.find();
+  public getItemFromLink(link: string): Promise<Product> {
+    return this.productRepository.findOneOrFail({
+      relations: ['category', 'fabricator'],
+      where: {
+        vendor: link,
+      },
+    });
+  }
+
+  public getItems(filterOptions: Record<string, unknown>): Promise<Product[]> {
+    return this.productRepository.find({
+      relations: ['category', 'fabricator'],
+      where: filterOptions,
+    });
+  }
+
+  public fetch(options?: AnyObject): Promise<Product[]> {
+    return this.productRepository.find({ ...options });
   }
 
   public getLength(): Promise<number> {
@@ -37,7 +54,9 @@ export class ProductsFetcher {
     return this.productRepository.remove(entity);
   }
 
-  public create(entity: DeepPartial<Product>): Promise<InsertResult> {
+  public create(
+    entity: QueryDeepPartialEntity<Product>,
+  ): Promise<InsertResult> {
     return this.productRepository.insert(entity);
   }
 }

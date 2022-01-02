@@ -1,15 +1,8 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { ICategory } from '@server/Categories/types/ICategory';
-import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
 import { Product } from '@server/Products/entities/product.entity';
+import { IProduct } from '@server/Products/types/IProduct';
 
 @Entity({ name: 'categories' })
 export class Category implements ICategory {
@@ -17,15 +10,14 @@ export class Category implements ICategory {
   public id!: number;
 
   @Column()
+  public parentId!: number;
+
+  @Column()
   public name!: string;
 
   @Column()
   public link!: string;
 
-  @ManyToMany(() => Fabricator)
-  @JoinTable()
-  public fabricators!: Fabricator[];
-
   @OneToMany(() => Product, (product) => product.category)
-  public products!: Product[];
+  public products!: IProduct[];
 }

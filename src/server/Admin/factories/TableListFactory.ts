@@ -5,15 +5,14 @@ import { IRow, IValue } from '@pages/admin/components/Table/types/IRow';
 import { IProduct } from '@server/Products/types/IProduct';
 import { ICategory } from '@server/Categories/types/ICategory';
 import { ILink } from '@pages/admin/components/Table/types/ILink';
-
-type TItemType = 'product' | 'category' | 'fabricator';
+import { ListName } from '@pages/admin/enums/ListName';
 
 @Injectable()
 export class TableListFactory {
   public getCategoriesList(categories: ICategory[]): IRow[] {
     const headerRow: IValue[] = [
+      'Идентификатор',
       'Название',
-      'Производители',
       'Продукты',
       'Действие',
     ];
@@ -22,10 +21,10 @@ export class TableListFactory {
       { values: headerRow },
       ...categories.map((category) => ({
         values: [
+          category.id,
           category.name,
-          category.fabricators,
           category.products,
-          this.getLinks(category.id, 'category'),
+          this.getLinks(category.id, ListName.CATEGORIES),
         ] as IValue[],
       })),
     ];
@@ -35,7 +34,6 @@ export class TableListFactory {
     const headerRow: IValue[] = [
       'Идентификатор',
       'Название',
-      'Категории',
       'Продукты',
       'Действие',
     ];
@@ -46,9 +44,8 @@ export class TableListFactory {
         values: [
           fabricator.id,
           fabricator.name,
-          fabricator.categories,
           fabricator.products,
-          this.getLinks(fabricator.id, 'fabricator'),
+          this.getLinks(fabricator.id, ListName.FABRICATORS),
         ] as IValue[],
       })),
     ];
@@ -74,13 +71,13 @@ export class TableListFactory {
             },
           ],
           product.price,
-          this.getLinks(product.id, 'product'),
+          this.getLinks(product.id, ListName.PRODUCTS),
         ] as IValue[],
       })),
     ];
   }
 
-  private getLinks: (itemId: number, itemType: TItemType) => ILink[] = (
+  private getLinks: (itemId: number, itemType: ListName) => ILink[] = (
     itemId,
     itemType,
   ) => [

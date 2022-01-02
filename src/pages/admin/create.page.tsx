@@ -1,17 +1,10 @@
 import { NextPage } from 'next';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Col, Container, Row } from 'reactstrap';
 import styled from 'styled-components';
-import { Primitive } from 'type-fest';
-import convertToUrl from 'transliterate-cyrillic-text-to-latin-url';
 
-import { Input } from '@components/Input/Input';
-import { Button } from '@components/Button/Button';
-import {
-  editItemTranslation,
-  fieldTypeTranslation,
-} from '@pages/admin/utils/translation';
+import { editItemTranslation } from '@pages/admin/utils/translation';
 import { Sidebar } from '@pages/admin/components/Sidebar/Sidebar';
 import { CreateItemRequest } from '@server/Admin/dto/CreateItemRequest';
 import { createAdminPageApi } from '@pages/admin/api/CreateAdminPageApi';
@@ -20,9 +13,7 @@ import {
   IWithCreateAdminPageState,
   withCreateAdminPageState,
 } from '@pages/admin/hocs/withCreateAdminPageState';
-import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
-import { Category } from '@server/Categories/entities/category.entity';
-
+import { InputForm } from '@pages/admin/components/InputForm/InputForm';
 
 interface IProps {
   type?: ListName;
@@ -32,7 +23,7 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
   type,
   addPopup,
 }) => {
-  const getInitialValuesState = (): Record<string, Primitive> => {
+  const getInitialValuesState = (): Record<string, string> => {
     switch (type) {
       case 'products':
         return {
@@ -42,55 +33,33 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
           fabricator: '',
           imageUrl: '',
           description: '',
-          price: 0,
+          price: '0',
         };
       case 'categories':
         return {
+          parentId: '',
           name: '',
-          link: '',
+          link: '/',
         };
       case 'fabricators':
         return {
           name: '',
           imageUrl: '',
-          link: '',
+          link: '/',
         };
       default:
         throw new Error('Ошибка. Неизвестный тип сущности');
     }
   };
 
-  const [valuesState, setValuesState] = useState<
-    Record<string, Primitive | Category | Fabricator>
-  >(getInitialValuesState());
+  const [valuesState, setValuesState] = useState<Record<string, string>>(
+    getInitialValuesState(),
+  );
   const router = useRouter();
-  const linkIsAutoEditable = useRef(true);
 
   if (!type) {
     return null;
   }
-
-  const onInputChange = (value: string, valuesKey: string): void => {
-    if (
-      value !== '' &&
-      !('price' in valuesState) &&
-      valuesKey === 'name' &&
-      linkIsAutoEditable.current
-    ) {
-      void setValuesState({
-        ...valuesState,
-        link: convertToUrl(value),
-        name: value,
-      });
-
-      return;
-    }
-
-    void setValuesState({
-      ...valuesState,
-      [valuesKey]: value,
-    });
-  };
 
   const onSaveData = async (): Promise<void> => {
     const values = Object.values(valuesState);
@@ -108,30 +77,38 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
       return;
     }
 
-    try {
-      valuesState.category = await createAdminPageApi.getCategory(
-        (valuesState.category as string) || '',
-      );
-    } catch {
-      addPopup({
-        title: 'Ошибка создания',
-        description: 'Категория не найдена',
-      });
+    if (valuesState.category) {
+      try {
+        const category = await createAdminPageApi.getCategory(
+          valuesState.category,
+        );
 
-      return;
+        valuesState.category = String(category.id);
+      } catch {
+        addPopup({
+          title: 'Ошибка создания',
+          description: 'Категория не найдена',
+        });
+
+        return;
+      }
     }
 
-    try {
-      valuesState.fabricator = await createAdminPageApi.getFabricator(
-        (valuesState.fabricator as string) || '',
-      );
-    } catch {
-      addPopup({
-        title: 'Ошибка создания',
-        description: 'Производитель не найден',
-      });
+    if (valuesState.fabricator) {
+      try {
+        const fabricator = await createAdminPageApi.getFabricator(
+          valuesState.fabricator || '',
+        );
 
-      return;
+        valuesState.fabricator = String(fabricator.id);
+      } catch {
+        addPopup({
+          title: 'Ошибка создания',
+          description: 'Производитель не найден',
+        });
+
+        return;
+      }
     }
 
     const request = new CreateItemRequest();
@@ -144,12 +121,12 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
       item: valuesState,
     });
 
-    router.back();
+    await router.push(`/admin?activeItem=${type}`);
   };
 
   return (
     <Container>
-      <h1>Редактирование {editItemTranslation[type]}</h1>
+      <h1>Создание {editItemTranslation[type]}</h1>
       <SContent>
         <Row>
           <Col md={4} sm={6} xs={12} lg={3}>
@@ -158,34 +135,14 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
             </SListGroup>
           </Col>
           <Col>
-            <SFormWrapper>
-              {valuesState &&
-                Object.keys(valuesState).map((key, idx) => (
-                  <SInput key={idx}>
-                    <div>
-                      {fieldTypeTranslation[key]} {editItemTranslation[type]}
-                    </div>
-                    <Input
-                      disabled={key === 'id'}
-                      isFluid={true}
-                      value={String(valuesState[key])}
-                      onChange={(e) => {
-                        onInputChange(e.currentTarget.value, key);
-                      }}
-                      onBlur={(e) => {
-                        if (key === 'link' && e.currentTarget.value === '') {
-                          linkIsAutoEditable.current = true;
-                        }
-
-                        if (key === 'name') {
-                          linkIsAutoEditable.current = false;
-                        }
-                      }}
-                    />
-                  </SInput>
-                ))}
-              <Button onClick={onSaveData}>Сохранить данные</Button>
-            </SFormWrapper>
+            <SInputForm>
+              <InputForm
+                setValuesState={setValuesState}
+                valuesState={valuesState}
+                onSaveData={onSaveData}
+                type={type}
+              />
+            </SInputForm>
           </Col>
         </Row>
       </SContent>
@@ -195,7 +152,7 @@ const CreatePage: NextPage<IProps & IWithCreateAdminPageState> = ({
 
 export default withCreateAdminPageState(CreatePage);
 
-const SFormWrapper = styled.div`
+const SInputForm = styled.div`
   & > * {
     margin-top: 20px;
   }
@@ -204,8 +161,5 @@ const SContent = styled.div`
   margin-top: 20px;
 `;
 const SListGroup = styled.div`
-  margin-top: 10px;
-`;
-const SInput = styled.div`
   margin-top: 10px;
 `;

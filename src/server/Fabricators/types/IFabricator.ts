@@ -1,6 +1,4 @@
 // eslint-disable-next-line import/no-cycle
-import { ICategory } from '@server/Categories/types/ICategory';
-// eslint-disable-next-line import/no-cycle
 import { IProduct } from '@server/Products/types/IProduct';
 
 export interface IFabricator {
@@ -8,6 +6,5 @@ export interface IFabricator {
   name: string;
   imageUrl: string;
   link: string;
-  categories: ICategory[];
   products: IProduct[];
 }

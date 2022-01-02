@@ -3,6 +3,8 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IProduct } from '@server/Products/types/IProduct';
 import { Category } from '@server/Categories/entities/category.entity';
 import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
+import { ICategory } from '@server/Categories/types/ICategory';
+import { IFabricator } from '@server/Fabricators/types/IFabricator';
 
 @Entity({
   name: 'products',
@@ -27,8 +29,8 @@ export class Product implements IProduct {
   public price!: number;
 
   @ManyToOne(() => Category, (category) => category.products)
-  public category!: Category;
+  public category!: ICategory;
 
   @ManyToOne(() => Fabricator, (fabricator) => fabricator.products)
-  public fabricator!: Fabricator;
+  public fabricator!: IFabricator;
 }

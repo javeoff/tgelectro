@@ -7,7 +7,11 @@ import { boxColor } from '@common/utils/colors';
 import ConsultantImg from '@assets/img/consultant.png';
 import { Form } from '@components/Form/Form';
 
-export const Feedback: FC = () => (
+interface IProps {
+  initialValue?: string;
+}
+
+export const Feedback: FC<IProps> = ({ initialValue }) => (
   <SWrapper>
     <Container>
       <Row>
@@ -21,6 +25,7 @@ export const Feedback: FC = () => (
 
             <SForm>
               <Form
+                defaultDescriptionInputValue={initialValue}
                 descriptionInput={true}
                 phoneInput={true}
                 emailInput={true}

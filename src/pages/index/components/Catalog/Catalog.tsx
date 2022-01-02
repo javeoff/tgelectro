@@ -27,7 +27,7 @@ const CatalogComponent: FC<IWithCatalogState> = ({ fabricators }) => {
         />
       </SAlphabetRange>
       <SWrapper>
-        <CatalogGallery fabricators={filteredFabricators} />
+        <CatalogGallery items={filteredFabricators} />
       </SWrapper>
     </div>
   );

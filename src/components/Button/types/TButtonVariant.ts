@@ -1,1 +1,1 @@
-export type TButtonVariant = 'primary' | 'outline';
+export type TButtonVariant = 'primary' | 'outline' | 'transparent';

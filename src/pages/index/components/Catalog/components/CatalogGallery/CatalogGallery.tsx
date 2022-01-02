@@ -3,18 +3,28 @@ import styled from 'styled-components';
 import { Card, Col, Row } from 'reactstrap';
 import { useRouter } from 'next/router';
 
-import { IFabricator } from '@server/Fabricators/types/IFabricator';
+import { mainColor } from '@common/utils/colors';
 
-export interface ICatalogGalleryProps {
-  fabricators: IFabricator[];
+interface IItem {
+  imageUrl: string;
+  link: string;
+  name?: string;
 }
 
-export const CatalogGallery: FC<ICatalogGalleryProps> = ({ fabricators }) => {
+export interface ICatalogGalleryProps {
+  showTitle?: boolean;
+  items: IItem[];
+}
+
+export const CatalogGallery: FC<ICatalogGalleryProps> = ({
+  items,
+  showTitle = false,
+}) => {
   const router = useRouter();
 
   return (
     <Row>
-      {fabricators.map(({ imageUrl, link }, idx) => (
+      {items.map(({ imageUrl, link, name }, idx) => (
         <SCol
           xs={12}
           sm={6}
@@ -25,15 +35,24 @@ export const CatalogGallery: FC<ICatalogGalleryProps> = ({ fabricators }) => {
           onClick={() => router.push(link)}
         >
           <Card>
-            <img src={imageUrl} alt={`catalog${idx}`} />
+            <img src={imageUrl} alt={`${imageUrl}-${idx}`} />
           </Card>
+          {showTitle && <STitle>{name}</STitle>}
         </SCol>
       ))}
     </Row>
   );
 };
 
+const STitle = styled.div`
+  font-size: 0.9em;
+`;
 const SCol = styled(Col)`
   cursor: pointer;
-  margin-top: 10px;
+  margin: 10px 0;
+
+  &:hover ${STitle} {
+    text-decoration: underline;
+    color: ${mainColor};
+  }
 `;

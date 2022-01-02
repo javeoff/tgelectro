@@ -4,22 +4,17 @@ import { FabricatorsFetcher } from '@server/Fabricators/services/fabricators.fet
 import { ProductsFetcher } from '@server/Products/services/products.fetcher';
 import { CategoriesFetcher } from '@server/Categories/services/categories.fetcher';
 import { ListName } from '@pages/admin/enums/ListName';
-import { IFabricator } from '@server/Fabricators/types/IFabricator';
-import { ICategory } from '@server/Categories/types/ICategory';
-import { IProduct } from '@server/Products/types/IProduct';
-import { TItemType } from '@server/Admin/types/TItemType';
 import { SaveItemRequest } from '@server/Admin/dto/SaveItemRequest';
 import { Category } from '@server/Categories/entities/category.entity';
 import { Product } from '@server/Products/entities/product.entity';
 import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
 import { DeleteItemRequest } from '@server/Admin/dto/DeleteItemRequest';
 import { CreateItemRequest } from '@server/Admin/dto/CreateItemRequest';
-import { getListNameByListType } from '@common/utils/getListNameByListType';
 
 interface ILists {
-  [ListName.PRODUCTS]: IProduct[];
-  [ListName.CATEGORIES]: ICategory[];
-  [ListName.FABRICATORS]: IFabricator[];
+  [ListName.PRODUCTS]: Product[];
+  [ListName.CATEGORIES]: Category[];
+  [ListName.FABRICATORS]: Fabricator[];
 }
 
 @Injectable()
@@ -31,15 +26,15 @@ export class AdminService {
   ) {}
 
   public getService(
-    listType: TItemType | ListName,
+    listType: ListName,
   ): FabricatorsFetcher | ProductsFetcher | CategoriesFetcher {
     switch (listType) {
-      case 'product':
+      case ListName.PRODUCTS:
       default:
         return this.productsFetcher;
-      case 'category':
+      case ListName.CATEGORIES:
         return this.categoriesFetcher;
-      case 'fabricator':
+      case ListName.FABRICATORS:
         return this.fabricatorsFetcher;
     }
   }
@@ -62,12 +57,12 @@ export class AdminService {
 
   public update(dto: SaveItemRequest): Promise<unknown> {
     switch (dto.itemType) {
-      case 'product':
+      case ListName.PRODUCTS:
       default:
         return this.productsFetcher.update(dto.item as Product);
-      case 'category':
+      case ListName.CATEGORIES:
         return this.categoriesFetcher.update(dto.item as Category);
-      case 'fabricator':
+      case ListName.FABRICATORS:
         return this.fabricatorsFetcher.update(dto.item as Fabricator);
     }
   }

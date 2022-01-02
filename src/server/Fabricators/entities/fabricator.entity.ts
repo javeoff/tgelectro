@@ -1,15 +1,8 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { IFabricator } from '@server/Fabricators/types/IFabricator';
-import { Category } from '@server/Categories/entities/category.entity';
 import { Product } from '@server/Products/entities/product.entity';
+import { IProduct } from '@server/Products/types/IProduct';
 
 @Entity({
   name: 'fabricators',
@@ -27,10 +20,6 @@ export class Fabricator implements IFabricator {
   @Column()
   public link!: string;
 
-  @ManyToMany(() => Category)
-  @JoinTable()
-  public categories!: Category[];
-
-  @OneToMany(() => Product, (product) => product.category)
-  public products!: Product[];
+  @OneToMany(() => Product, (product) => product.fabricator)
+  public products!: IProduct[];
 }

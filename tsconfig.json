@@ -25,6 +25,9 @@
       ],
       "@styled/*": [
         "src/styled/*"
+      ],
+      "react-native-sqlite-storage": [
+        "src/dummy.ts"
       ]
     },
     "baseUrl": ".",
@@ -57,7 +60,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "strict": true,
-    "incremental": true
+    "incremental": true,
   },
   "include": [
     "src/**/*",

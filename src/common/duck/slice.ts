@@ -38,6 +38,7 @@ export const commonSlice = createFeatureSlice({
       draft.state.pageId = payload;
     },
     setModalId: (draft, { payload }: PayloadAction<ModalType | undefined>) => {
+      draft.defaultModalInputValue = '';
       draft.modalId = payload;
     },
     setDefaultModalInputValue: (draft, { payload }: PayloadAction<string>) => {

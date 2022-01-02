@@ -28,14 +28,14 @@ export const Table: FC<IProps> = ({ rows, setRows, activeList }) => {
           const isLink = Array.isArray(value);
 
           if (isLink) {
-            return value.find((link) => link.id === id);
+            return value.some((link) => link.id === id);
           }
 
           return false;
         }),
       );
 
-      delete draft[rowId];
+      draft.splice(rowId, 1);
     });
 
     setRows(newRowsState);
