@@ -6,6 +6,7 @@ import { CategoriesFetcher } from '@server/Categories/services/categories.fetche
 import { PageName } from '@common/enums/PageName';
 import { Feature } from '@common/enums/Feature';
 import { FabricatorsFactory } from '@server/Fabricators/factories/fabricators.factory';
+import { siteName } from '@common/utils/constants';
 
 @Controller()
 export class AppController {
@@ -17,20 +18,19 @@ export class AppController {
 
   @Page(PageName.INDEX)
   public async indexPage(): Promise<unknown> {
-    const fabricators = await this.fabricatorsFetcher.fetch();
+    const fabricators = await this.fabricatorsFetcher.fetch({
+      take: 30,
+    });
 
     return {
+      fabricators: this.fabricatorsFactory.getFabricatorsWithLinks(fabricators),
       features: {
         [Feature.COMMON]: {
           pageId: PageName.INDEX,
           categories: await this.categoriesFetcher.fetchParent(),
         },
-        [Feature.CATALOG]: {
-          fabricators:
-            this.fabricatorsFactory.getFabricatorsWithLinks(fabricators),
-        },
       },
-      title: 'Index Page',
+      title: `Главная страница | ${siteName}`,
     };
   }
 
@@ -43,7 +43,7 @@ export class AppController {
           categories: await this.categoriesFetcher.fetchParent(),
         },
       },
-      title: 'Delivery Page',
+      title: `Доставка | ${siteName}`,
     };
   }
 
@@ -56,7 +56,7 @@ export class AppController {
           categories: await this.categoriesFetcher.fetchParent(),
         },
       },
-      title: 'Guarantees Page',
+      title: `Гарантии | ${siteName}`,
     };
   }
 
@@ -69,7 +69,7 @@ export class AppController {
           categories: await this.categoriesFetcher.fetchParent(),
         },
       },
-      title: 'Suppliers Page',
+      title: `Поставщикам | ${siteName}`,
     };
   }
 
@@ -82,7 +82,7 @@ export class AppController {
           categories: await this.categoriesFetcher.fetchParent(),
         },
       },
-      title: 'About Page',
+      title: `О нас | ${siteName}`,
     };
   }
 
@@ -95,7 +95,7 @@ export class AppController {
           categories: await this.categoriesFetcher.fetchParent(),
         },
       },
-      title: 'Contacts Page',
+      title: `Категории | ${siteName}`,
     };
   }
 }

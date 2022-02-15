@@ -15,6 +15,7 @@ const STextarea = styled.textarea<{ isFluid: boolean }>`
   padding: 5px 15px;
   border-radius: 5px;
   border: 1px solid ${boxColor};
+  resize: none;
 
   ${({ isFluid }) =>
     isFluid &&

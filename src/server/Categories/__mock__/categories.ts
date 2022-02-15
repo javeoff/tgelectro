@@ -1,6 +1,4 @@
-import { ICategory } from '@server/Categories/types/ICategory';
-
-export const categories: ICategory[] = [
+export const categories = [
   {
     id: 0,
     name: 'Автоматизация',

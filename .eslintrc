@@ -210,10 +210,10 @@
             "allowTypedFunctionExpressions": true
           }
         ],
-        "@typescript-eslint/method-signature-style": [
-          "error",
-          "method"
-        ],
+//        "@typescript-eslint/method-signature-style": [
+//          "error",
+//          "method"
+//        ],
         "@typescript-eslint/naming-convention": [
           "error",
           {

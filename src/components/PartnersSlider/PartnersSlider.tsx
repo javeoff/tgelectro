@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import Image from 'next/image';
+import styled from 'styled-components';
 
 export const PartnersSlider: FC = () => {
   const [partners, setPartners] = useState<Array<typeof import('*.png')>>([]);
@@ -37,12 +38,18 @@ export const PartnersSlider: FC = () => {
   };
 
   return (
-    <Slider {...settings}>
-      {partners.map((partnerImage, idx) => (
-        <div key={idx}>
-          <Image src={partnerImage} />
-        </div>
-      ))}
-    </Slider>
+    <SWrapper>
+      <Slider {...settings}>
+        {partners.map((partnerImage, idx) => (
+          <div key={idx}>
+            <Image src={partnerImage} />
+          </div>
+        ))}
+      </Slider>
+    </SWrapper>
   );
 };
+
+const SWrapper = styled.div`
+  overflow: hidden;
+`;

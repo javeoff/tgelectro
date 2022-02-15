@@ -1,5 +1,5 @@
 import { AnyObject } from 'immer/dist/types/types-internal';
-import Axios, { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
+import Axios, { AxiosError, AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 
 import { getApiRoute } from '@common/api/utils/getApiRoute';
 import { ILink } from '@common/api/types/ILink';

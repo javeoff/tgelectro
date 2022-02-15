@@ -4,6 +4,7 @@ import { Primitive } from 'type-fest';
 import { ListName } from '@pages/admin/enums/ListName';
 import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
 import { Category } from '@server/Categories/entities/category.entity';
+import { Product } from '@server/Products/entities/product.entity';
 
 export class CreateItemRequest {
   @IsDefined({
@@ -14,5 +15,5 @@ export class CreateItemRequest {
   @IsDefined({
     message: 'Тип обновляемой сущности не определен.',
   })
-  public item!: Record<string, Primitive | Category | Fabricator>;
+  public item!: Product | Category | Fabricator;
 }

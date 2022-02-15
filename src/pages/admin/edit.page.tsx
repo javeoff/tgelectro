@@ -1,89 +1,57 @@
 import { NextPage } from 'next';
-import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { Col, Container, Row } from 'reactstrap';
 import styled from 'styled-components';
 
 import { editItemTranslation } from '@pages/admin/utils/translation';
 import { Sidebar } from '@pages/admin/components/Sidebar/Sidebar';
-import { editAdminPageApi } from '@pages/admin/api/EditAdminPageApi';
-import { SaveItemRequest } from '@server/Admin/dto/SaveItemRequest';
 import {
   IWithEditAdminPageState,
   withEditAdminPageState,
 } from '@pages/admin/hocs/withEditAdminPageState';
 import { InputForm } from '@pages/admin/components/InputForm/InputForm';
 import { ListName } from '@pages/admin/enums/ListName';
+import { useForm } from '@pages/admin/hooks/useForm';
+import { Logo } from '@components/Logo/Logo';
+import { TValuesState } from '@pages/admin/types/TValuesState';
 
 interface IProps {
-  type?: ListName;
-  id?: string;
-  item: Record<string, string>;
+  type: ListName;
+  id: string;
+  item: TValuesState;
 }
 
 const EditPage: NextPage<IProps & IWithEditAdminPageState> = ({
-  type,
   id,
+  type,
   item,
   addPopup,
 }) => {
-  const [valuesState, setValuesState] = useState(item);
-  const router = useRouter();
+  // eslint-disable-next-line no-console
+  console.log(item);
 
-  if (!item || !type || !id) {
-    return null;
-  }
-
-  const onSaveData = async (): Promise<void> => {
-    const request = new SaveItemRequest();
-
-    request.item = {};
-
-    if ('category' in valuesState && 'fabricator' in valuesState) {
-      try {
-        request.item.category = await editAdminPageApi.getCategory(
-          String(valuesState.category) || '',
-        );
-
-        request.item.fabricator = await editAdminPageApi.getFabricator(
-          String(valuesState.fabricator) || '',
-        );
-      } catch (error) {
-        if (error instanceof Error) {
-          addPopup({
-            title: 'Ошибка создания',
-            description: error.message,
-          });
-
-          return;
-        }
-      }
-    }
-
-    request.itemType = type;
-    request.id = id;
-    request.item = { ...valuesState, ...request.item };
-
-    await editAdminPageApi.saveItem(request);
-    await router.push(`/admin?activeItem=${type}`);
-  };
+  const { valuesState, setValuesState, saveForm } = useForm({
+    addPopup,
+    itemType: type,
+    initialValuesState: item,
+  });
 
   return (
     <Container>
-      <h1>Редактирование {editItemTranslation[type]}</h1>
+      <Logo />
       <SContent>
         <Row>
-          <Col md={4} sm={6} xs={12} lg={3}>
+          <Col md={12} sm={12} xs={12} lg={3}>
             <SListGroup>
               <Sidebar redirect={true} />
             </SListGroup>
           </Col>
           <Col>
+            <h1>Редактирование {editItemTranslation[type]}</h1>
             <SInputForm>
               <InputForm
                 setValuesState={setValuesState}
                 valuesState={valuesState}
-                onSaveData={onSaveData}
+                saveForm={() => saveForm(Number(id) as unknown as number)}
                 type={type}
               />
             </SInputForm>

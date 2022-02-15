@@ -3,9 +3,9 @@ import { PageName } from '@common/enums/PageName';
 
 export const menuItems: IMenuItem[] = [
   {
-    name: PageName.INDEX,
+    name: PageName.FABRICATORS,
     title: 'Производители',
-    link: '/',
+    link: '/fabricators',
   },
   {
     name: PageName.CATEGORIES,

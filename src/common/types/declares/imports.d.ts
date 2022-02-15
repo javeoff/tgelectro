@@ -1,7 +1,13 @@
+import { FC, SVGAttributes } from 'react';
+
 declare global {
   declare module '*.svg' {
-    const svg: string;
+    const value: FC<SVGAttributes<SVGElement>>;
 
-    export default svg;
+    export const ReactComponent = value;
+
+    const defaultValue: string;
+
+    export default defaultValue;
   }
 }

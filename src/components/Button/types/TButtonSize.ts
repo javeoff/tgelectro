@@ -1,1 +1,1 @@
-export type TButtonSize = 'sm' | 'md';
+export type TButtonSize = 'sm' | 'md' | 'lg';

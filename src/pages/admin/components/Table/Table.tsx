@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { Table as TableComponent } from 'reactstrap';
-import Link from 'next/link';
 import produce from 'immer';
 import styled from 'styled-components';
 
@@ -8,6 +7,7 @@ import { IRow } from '@pages/admin/components/Table/types/IRow';
 import { ListName } from '@pages/admin/enums/ListName';
 import { adminPageApi } from '@pages/admin/api/AdminPageApi';
 import { DeleteItemRequest } from '@server/Admin/dto/DeleteItemRequest';
+import { Link } from '@components/Link/Link';
 
 interface IProps {
   rows: IRow[];
@@ -45,7 +45,7 @@ export const Table: FC<IProps> = ({ rows, setRows, activeList }) => {
 
   return (
     <STable>
-      <TableComponent responsive={false}>
+      <TableComponent responsive={true}>
         <thead>
           <tr key={0}>
             <th>#</th>

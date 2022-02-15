@@ -21,7 +21,7 @@ export const FeedbackModal: FC<IProps> = ({ toggleModal, isActive }) => (
       Заказать звонок
     </ModalHeader>
     <ModalBody>
-      <Form phoneInput={true} nameInput={true} />
+      <Form onSend={toggleModal} showInputs={{ phone: true, name: true }} />
     </ModalBody>
   </ModalCard>
 );

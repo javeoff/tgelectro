@@ -30,9 +30,12 @@ export const OrderModal: FC<IProps> = ({
       <SDescription>Ответим на ваш запрос в течение 15 минут</SDescription>
       <SForm>
         <Form
-          descriptionInput={true}
-          phoneInput={true}
-          emailInput={true}
+          onSend={toggleModal}
+          showInputs={{
+            description: true,
+            phone: true,
+            email: true,
+          }}
           defaultDescriptionInputValue={defaultDescriptionInputValue}
         />
       </SForm>

@@ -23,10 +23,10 @@ const Contacts: FC<IWithContactsPageState> = ({ setModalId }) => (
     <SSection>
       <SWrapper>
         <Container>
-          <h2>Контактные данные</h2>
+          <h2>Контактные данные ООО &quot;Снабжение от А до Я&quot;</h2>
           <SRow>
-            <Row>
-              <Col md={4}>
+            <SFlex>
+              <SRightWrapper>
                 <div>
                   <SButtonRow>
                     <Button onClick={() => setModalId(ModalType.ORDER_MODAL)}>
@@ -42,31 +42,26 @@ const Contacts: FC<IWithContactsPageState> = ({ setModalId }) => (
                 <SContactInfo>
                   <SContent>
                     <h3>Телефон</h3>
-                    <div>+7 (999) 999 99-99</div>
-                    <div>+7 (999) 999 99-99</div>
+                    <div>8 (800) 700-95-55</div>
+                    <div>+7 (4912) 307-300</div>
+                    <div>+7 (953) 749-19-19</div>
                   </SContent>
                   <SContent>
                     <h3>Почта</h3>
-                    <div>info@website.com</div>
+                    <div>aleks-k1984@ya.ru</div>
                   </SContent>
                   <SContent>
                     <h3>Офис и склад</h3>
-                    <div>1234 Выдуманный, ул. Новая, 12/3</div>
-                  </SContent>
-                  <SContent>
-                    <h3>Склад в Рязани</h3>
-                    <div>1234 Выдуманный, ул. Новая, 12/3</div>
+                    <div>г. Рязань, ул. Щорса 38/11, строение 1, офис 206 </div>
                   </SContent>
                   <SContent>
                     <h3>Время работы</h3>
                     <div>пн-пт с 8:00 до 18:00</div>
                   </SContent>
                 </SContactInfo>
-              </Col>
-              <Col md={4}>
-                <Map />
-              </Col>
-            </Row>
+              </SRightWrapper>
+              <Map />
+            </SFlex>
           </SRow>
         </Container>
       </SWrapper>
@@ -91,6 +86,14 @@ const SSection = styled.div`
 const SRow = styled.div`
   margin-top: 50px;
 `;
+const SFlex = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+const SRightWrapper = styled.div`
+  margin-bottom: 30px;
+`
 const SWrapper = styled.div`
   text-align: center;
   margin-top: 30px;

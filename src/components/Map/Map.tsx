@@ -1,14 +1,19 @@
-import { FC } from 'react';
-import { YMaps, Map as YandexMap } from 'react-yandex-maps';
+import { FC, useContext } from 'react';
 
-export const Map: FC = () => (
-  <YMaps>
+import { AdaptiveContext } from '@common/contexts/adaptiveContext';
+
+export const Map: FC = () => {
+  const isMobile = useContext(AdaptiveContext);
+
+  return (
     <div>
-      <YandexMap
-        width={860}
-        height={500}
-        defaultState={{ center: [55.75, 37.57], zoom: 9 }}
+      <iframe
+        title='map'
+        src='https://yandex.ru/map-widget/v1/?um=constructor%3A7ad8ccaa975426dfe7600d3ec08eabf6fabf2117a26d02d90fc2989e9c623d44&amp;source=constructor'
+        width={isMobile ? '100%' : '860'}
+        height='500'
+        frameBorder='0'
       />
     </div>
-  </YMaps>
-);
+  );
+};

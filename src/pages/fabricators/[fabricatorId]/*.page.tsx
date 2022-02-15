@@ -1,25 +1,49 @@
 import { NextPage } from 'next';
 import { Col, Container, Row } from 'reactstrap';
-import Link from 'next/link';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
-import { Header } from '@components/Header/Header';
 import { ProductsTable } from '@components/ProductsTable/ProductsTable';
 import { Footer } from '@components/Footer/Footer';
 import { ICategory } from '@server/Categories/types/ICategory';
+import { Product } from '@server/Products/entities/product.entity';
+import { Pagination } from '@components/Pagination/Pagination';
+import { Link } from '@components/Link/Link';
+import { Button } from '@components/Button/Button';
+import { ModalType } from '@components/Modal/enums/ModalType';
+import { Header } from '@components/Header/Header';
+import {
+  IWithFabricatorPageState,
+  withFabricatorPageState,
+} from '@pages/fabricators/[fabricatorId]/hocs/withFabricatorPageState';
+import { Breadcrumbs, IBreadcrumb } from '@components/Breadcrumbs/Breadcrumbs';
 
 interface IProps {
   params: string[];
   category: ICategory;
   categories: ICategory[];
+  products: Product[];
+  categoriesProductsLengths: Record<string, number>;
+  pagesLength: number;
+  currentPage: string;
+  breadcrumbs: IBreadcrumb[];
 }
 
-const DeepFabricatorPage: NextPage<IProps> = ({
-  params,
-  category: { name, products },
+const DeepFabricatorPage: NextPage<IProps & IWithFabricatorPageState> = ({
+  setModalId,
+  setDefaultModalInputValue,
+  category: { name },
   categories,
+  products,
+  categoriesProductsLengths,
+  pagesLength,
+  currentPage,
+  breadcrumbs,
 }) => {
+  const onPurchaseClick = (): void => {
+    setModalId(ModalType.ORDER_MODAL);
+    setDefaultModalInputValue(name);
+  };
   const router = useRouter();
 
   return (
@@ -30,22 +54,35 @@ const DeepFabricatorPage: NextPage<IProps> = ({
 
       <SWrapper>
         <Container>
+          {breadcrumbs?.length && <Breadcrumbs items={breadcrumbs} />}
           <Row>
             <Col md={4} sm={6} xs={12} lg={3}>
               <h1>{name}</h1>
               <b>Категории</b>
               <div>
-                {categories.map(({ name: categoryName, link }, idx) => (
-                  <div key={idx}>
-                    <Link href={`${router.asPath}/${link}`}>
-                      {categoryName}
-                    </Link>
-                  </div>
+                {categories.map(({ name: categoryName, link, id }, idx) => (
+                  <Link key={idx} href={`${router.asPath}/${link}`}>
+                    {`${categoryName} ${categoriesProductsLengths[id] || 0}`}
+                  </Link>
                 ))}
               </div>
             </Col>
             <Col>
-              <ProductsTable products={products} />
+              <SButtonRow>
+                <Button onClick={onPurchaseClick} size='sm'>
+                  Заказать {name}
+                </Button>
+              </SButtonRow>
+
+              <SProductsTable>
+                <ProductsTable products={products} />
+              </SProductsTable>
+              <div>
+                <Pagination
+                  pagesLength={pagesLength}
+                  currentPage={currentPage}
+                />
+              </div>
             </Col>
           </Row>
         </Container>
@@ -57,7 +94,7 @@ const DeepFabricatorPage: NextPage<IProps> = ({
   );
 };
 
-export default DeepFabricatorPage;
+export default withFabricatorPageState(DeepFabricatorPage);
 
 const SHeader = styled.div`
   margin-top: 20px;
@@ -65,6 +102,13 @@ const SHeader = styled.div`
 const SWrapper = styled.div`
   margin-top: 20px;
 `;
-const SFooter = styled.div`
+const SButtonRow = styled.div`
+  width: 100%;
+  text-align: right;
+`;
+const SProductsTable = styled.div`
   margin-top: 50px;
 `;
+const SFooter = styled.div`
+  margin-top: 50px;
+`

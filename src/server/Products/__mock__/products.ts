@@ -1,6 +1,4 @@
-import { IProduct } from '@server/Products/types/IProduct';
-
-export const products: IProduct[] = [
+export const products = [
   {
     vendor: '6GK5204-2BB00-2AA3',
     alternativeVendor: '6GK52042BB002AA3',

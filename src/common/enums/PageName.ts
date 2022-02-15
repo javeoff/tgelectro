@@ -1,5 +1,6 @@
 export enum PageName {
   INDEX = 'index',
+  FABRICATORS = 'fabricators',
   CATEGORIES = 'categories',
   CATEGORY = 'categories/:categoryLink',
   FABRICATOR = 'fabricators/:fabricatorLink',

@@ -35,11 +35,16 @@ const SRow = styled.div`
   color: #fff;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 const SRightWrapper = styled.div`
   margin-top: 10px;
   text-align: right;
+
+  @media screen and (max-width: 1080px) {
+    margin: 0 auto;
+  }
 `;
 
 const SCategories = styled.div`

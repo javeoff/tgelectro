@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common/decorators';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InsertResult, Repository } from 'typeorm';
+import { DeleteResult, InsertResult, Repository, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/browser/query-builder/QueryPartialEntity';
+import uniqBy from 'lodash/uniqBy';
 
 import { Fabricator } from '@server/Fabricators/entities/fabricator.entity';
 import { ProductsFetcher } from '@server/Products/services/products.fetcher';
-import { Product } from '@server/Products/entities/product.entity';
 import { FabricatorsFactory } from '@server/Fabricators/factories/fabricators.factory';
 
 @Injectable()
@@ -46,34 +46,30 @@ export class FabricatorsFetcher {
       category: { id: categoryId },
     });
 
-    const idsCollection = new Set(
-      products.map((product) => product.fabricator.id),
-    );
-    const ids = [...idsCollection];
-
-    const fabricators = ids.map(
-      (id) =>
-        (products.find((product) => product.fabricator.id === id) as Product)
-          .fabricator,
+    const uniqProductsByFabricatorId = uniqBy(
+      products,
+      (item) => item.fabricator.id,
     );
 
-    return this.fabricatorsFactory.getFabricatorsWithLinks(fabricators);
+    return this.fabricatorsFactory.getFabricatorsWithLinks(
+      uniqProductsByFabricatorId.map((product) => product.fabricator),
+    );
   }
 
-  public fetch(): Promise<Fabricator[]> {
-    return this.fabricatorsRepository.find();
+  public fetch(options?: Record<string, unknown>): Promise<Fabricator[]> {
+    return this.fabricatorsRepository.find({ ...options });
   }
 
   public getLength(): Promise<number> {
     return this.fabricatorsRepository.count();
   }
 
-  public update(entity: Fabricator): Promise<Fabricator> {
-    return this.fabricatorsRepository.save(entity);
+  public update(id: number, entity: Fabricator): Promise<UpdateResult> {
+    return this.fabricatorsRepository.update(id, entity);
   }
 
-  public remove(entity: Fabricator): Promise<Fabricator> {
-    return this.fabricatorsRepository.remove(entity);
+  public remove(entity: Fabricator): Promise<DeleteResult> {
+    return this.fabricatorsRepository.delete(entity.id);
   }
 
   public create(

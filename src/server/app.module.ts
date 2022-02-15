@@ -12,6 +12,8 @@ import { UsersModule } from '@server/Users/users.module';
 import { SystemErrorModule } from '@server/SystemError/SystemErrorModule';
 import { AdminModule } from '@server/Admin/admin.module';
 import { SearchModule } from '@server/Search/search.module';
+import { EmailModule } from '@server/Email/email.module';
+import { BreadcrumbsModule } from '@server/Breadcrumbs/breadcrumbs.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { SearchModule } from '@server/Search/search.module';
     SystemErrorModule,
     AdminModule,
     SearchModule,
+    EmailModule,
+    BreadcrumbsModule,
   ],
   controllers: [AppController],
 })

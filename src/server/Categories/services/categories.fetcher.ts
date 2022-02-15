@@ -1,13 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InsertResult, Repository } from 'typeorm';
+import {
+  DeleteResult,
+  InsertResult,
+  IsNull,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import uniqBy from 'lodash/uniqBy';
 
 import { Category } from '@server/Categories/entities/category.entity';
 import { ProductsFetcher } from '@server/Products/services/products.fetcher';
 import { Product } from '@server/Products/entities/product.entity';
 import { CategoriesFactory } from '@server/Categories/factories/categories.factory';
 import { IProduct } from '@server/Products/types/IProduct';
+import { FabricatorsFetcher } from '@server/Fabricators/services/fabricators.fetcher';
 
 @Injectable()
 export class CategoriesFetcher {
@@ -16,10 +24,14 @@ export class CategoriesFetcher {
     private readonly categoriesRepository: Repository<Category>,
     private readonly productsFetcher: ProductsFetcher,
     private readonly categoriesFactory: CategoriesFactory,
+    private readonly fabricatorsFetcher: FabricatorsFetcher,
   ) {}
 
-  public getItem(id: number): Promise<Category> {
-    return this.categoriesRepository.findOneOrFail({ id });
+  public getItem(id: number, relations = []): Promise<Category> {
+    return this.categoriesRepository.findOneOrFail({
+      where: { id },
+      relations: ['parent', ...relations],
+    });
   }
 
   public getItemFromLink(
@@ -40,16 +52,41 @@ export class CategoriesFetcher {
     });
   }
 
+  public async getCategoryTree(
+    category: Category,
+    parentTree: Category[],
+  ): Promise<Category[]> {
+    if (category.parent === null) {
+      return parentTree;
+    }
+
+    const parent = await this.getItem(category.parent.id);
+
+    if (parent.parent === null || parent.parent.id === 0) {
+      return parentTree.reverse();
+    }
+
+    parentTree.push(parent);
+
+    return this.getCategoryTree(parent, parentTree);
+  }
+
+  public async getCategoryChild(category: Category): Promise<Category[]> {
+    return this.categoriesRepository.find({
+      where: {
+        parent: {
+          id: category.id,
+        },
+      },
+      relations: ['products'],
+    });
+  }
+
   public async getCategoryChildren(
     category: Category,
     acc: Category[],
   ): Promise<Category[]> {
-    const childrenCategories = await this.categoriesRepository.find({
-      where: {
-        parentId: category.id,
-      },
-      relations: ['products'],
-    });
+    const childrenCategories = await this.getCategoryChild(category);
 
     acc.push(...childrenCategories);
 
@@ -81,25 +118,17 @@ export class CategoriesFetcher {
       fabricator: { id: fabricatorId },
     });
 
-    const idsCollection = new Set(
-      products.map((product) => product.category.id),
+    const uniqProductsByCategoryId = uniqBy(
+      products,
+      (item) => item.category.id,
     );
-    const ids = [...idsCollection];
 
-    return ids
-      .map((id) => {
-        const product = products.find(
-          ({ category }) => category.id === id,
-        ) as Product;
-
-        return product.category;
-      })
-      .filter((category) => category.parentId === 0);
+    return uniqProductsByCategoryId.map((product) => product.category);
   }
 
   public async fetchParent(): Promise<Category[]> {
     const categories = await this.categoriesRepository.find({
-      where: { parentId: 0 },
+      where: { parent: IsNull() },
     });
 
     return this.categoriesFactory.getCategoriesWithLink(categories);
@@ -113,12 +142,12 @@ export class CategoriesFetcher {
     return this.categoriesRepository.count();
   }
 
-  public update(entity: Category): Promise<Category> {
-    return this.categoriesRepository.save(entity);
+  public update(id: number, entity: Category): Promise<UpdateResult> {
+    return this.categoriesRepository.update(id, entity);
   }
 
-  public remove(entity: Category): Promise<Category> {
-    return this.categoriesRepository.remove(entity);
+  public remove(entity: Category): Promise<DeleteResult> {
+    return this.categoriesRepository.delete(entity.id);
   }
 
   public create(

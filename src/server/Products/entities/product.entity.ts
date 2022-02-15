@@ -22,7 +22,7 @@ export class Product implements IProduct {
   @Column()
   public imageUrl!: string;
 
-  @Column()
+  @Column('varchar', { length: 600 })
   public description!: string;
 
   @Column()

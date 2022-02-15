@@ -1,16 +1,16 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { createPortal } from 'react-dom';
 import { Toast, ToastBody, ToastHeader } from 'reactstrap';
 import styled from 'styled-components';
 
-import { IWithPopupState, withPopupState } from '@components/Popup/hocs/withPopupState';
+import {
+  IWithPopupState,
+  withPopupState,
+} from '@components/Popup/hocs/withPopupState';
 import { usePortal } from '@common/hooks/usePortal';
 
 const PopupComponent: FC<IWithPopupState> = ({ popups }) => {
   const portalElement = usePortal(true);
-
-  useEffect(() => {
-  }, [popups]);
 
   if (popups.length === 0) {
     return <></>;
@@ -38,6 +38,7 @@ const PopupComponent: FC<IWithPopupState> = ({ popups }) => {
 export const Popup = withPopupState(PopupComponent);
 
 const SWrapper = styled.div`
+  z-index: 1056;
   position: fixed;
   bottom: 10px;
   left: 10px;

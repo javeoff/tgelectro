@@ -10,6 +10,7 @@ import {
   withProductsTableState,
 } from '@components/ProductsTable/hocs/withProductsTableState';
 import { ModalType } from '@components/Modal/enums/ModalType';
+import { getLinkByVendor } from '@components/ProductsTable/utils/getLinkByVendor';
 
 interface IProps {
   products: IProduct[];
@@ -21,6 +22,7 @@ const ProductsTableComponent: FC<IProps & IWithProductsTableState> = ({
   setDefaultModalInputValue,
 }) => {
   const router = useRouter();
+
   const onPurchaseClick = (
     e: MouseEvent<HTMLButtonElement>,
     vendor: string,
@@ -35,7 +37,7 @@ const ProductsTableComponent: FC<IProps & IWithProductsTableState> = ({
   };
 
   return (
-    <Table responsive={false}>
+    <Table responsive={true}>
       <thead>
         <tr>
           <th>Артикул</th>
@@ -47,15 +49,22 @@ const ProductsTableComponent: FC<IProps & IWithProductsTableState> = ({
       </thead>
       <tbody>
         {products.map((product, idx) => (
-          <SRow key={idx} onClick={() => onRowClick(product.vendor)}>
+          <SRow
+            key={idx}
+            onClick={() => onRowClick(getLinkByVendor(product.vendor))}
+          >
             <td>{product.vendor}</td>
             <td>{product.fabricator.name}</td>
-            <td>{product.description}</td>
+            <td>
+              <SDescription>{product.description}</SDescription>
+            </td>
             <td>{product.price}₽</td>
             <td>
               <Button
                 size='sm'
-                onClick={(e) => onPurchaseClick(e, product.vendor)}
+                onClick={(e) =>
+                  onPurchaseClick(e, getLinkByVendor(product.vendor))
+                }
               >
                 Купить
               </Button>
@@ -69,6 +78,11 @@ const ProductsTableComponent: FC<IProps & IWithProductsTableState> = ({
 
 export const ProductsTable = withProductsTableState(ProductsTableComponent);
 
+const SDescription = styled.div`
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+`;
 const SRow = styled.tr`
   cursor: pointer;
 

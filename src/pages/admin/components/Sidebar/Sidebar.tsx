@@ -8,6 +8,7 @@ import {
   IWithSidebarState,
   withSidebarState,
 } from '@pages/admin/components/Sidebar/hocs/withSidebarState';
+import { bgColor, darkColor, mainColor } from '@common/utils/colors';
 
 const sidebarState = [
   {
@@ -26,6 +27,7 @@ const sidebarState = [
 
 interface IProps {
   redirect?: boolean;
+  onListChange?(): void;
 }
 
 const SidebarComponent: FC<IProps & IWithSidebarState> = ({
@@ -33,16 +35,20 @@ const SidebarComponent: FC<IProps & IWithSidebarState> = ({
   setActiveList,
   activeList,
   listLengths,
+  onListChange,
 }): ReactElement => {
   const router = useRouter();
 
   return (
-    <ListGroup>
+    <ListGroup flush={true}>
       {sidebarState.map(({ name, listType }, idx) => (
         <SListGroupItem key={idx}>
           <ListGroupItem
             action={false}
             onClick={async () => {
+              if (onListChange) {
+                onListChange();
+              }
               setActiveList(listType);
 
               if (redirect) {
@@ -66,5 +72,17 @@ export const Sidebar = withSidebarState(SidebarComponent);
 const SListGroupItem = styled.div`
   & a {
     cursor: pointer;
+  }
+
+  & > .active {
+    background: #fff;
+    color: #000;
+    border: 2px solid ${mainColor};
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  & > a {
+    background: #fff;
+    color: #000;
   }
 `;

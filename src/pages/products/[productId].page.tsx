@@ -1,7 +1,9 @@
 import { NextPage } from 'next';
-import { Col, Container, Row } from 'reactstrap';
+import { Card, Col, Container, Row } from 'reactstrap';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 import { IProduct } from '@server/Products/types/IProduct';
 import { Header } from '@components/Header/Header';
@@ -13,9 +15,12 @@ import {
   withProductPageState,
 } from '@pages/products/hocs/withProductPageState';
 import { Feedback } from '@components/Feedback/Feedback';
+import { getFabricatorImageUrl } from '@common/utils/getFabricatorImageUrl';
+import { Breadcrumbs, IBreadcrumb } from '@components/Breadcrumbs/Breadcrumbs';
 
 interface IProps {
   product: IProduct;
+  breadcrumbs: IBreadcrumb[];
 }
 
 const ProductPage: NextPage<IProps & IWithProductPageState> = ({
@@ -29,7 +34,24 @@ const ProductPage: NextPage<IProps & IWithProductPageState> = ({
     price,
     imageUrl,
   },
+  breadcrumbs,
 }) => {
+  const [defaultPhoto, setDefaultPhoto] = useState<
+    typeof import('*.jpg') | string
+  >('');
+
+  useEffect(() => {
+    const loadDefaultPhoto = async (): Promise<void> => {
+      const photo = await import('@assets/img/default.jpg');
+
+      setDefaultPhoto(photo);
+    };
+
+    if (!imageUrl) {
+      void loadDefaultPhoto();
+    }
+  }, [imageUrl]);
+
   const router = useRouter();
   const onPurchaseClick = (): void => {
     setModalId(ModalType.ORDER_MODAL);
@@ -48,6 +70,8 @@ const ProductPage: NextPage<IProps & IWithProductPageState> = ({
 
       <SWrapper>
         <Container>
+          {breadcrumbs?.length && <Breadcrumbs items={breadcrumbs} />}
+
           <SHistoryButton>
             <Button variant='transparent' onClick={() => router.back()}>
               ← Назад
@@ -55,7 +79,7 @@ const ProductPage: NextPage<IProps & IWithProductPageState> = ({
           </SHistoryButton>
 
           <Row>
-            <Col md={6} sm={6} xs={12} lg={5}>
+            <Col md={6} sm={6} xs={12} lg={7}>
               <h1>
                 {vendor} {fabricator.name}
               </h1>
@@ -69,6 +93,14 @@ const ProductPage: NextPage<IProps & IWithProductPageState> = ({
               </SAttribute>
               <SAttribute>
                 <b>Производитель</b>
+                <SImageCard>
+                  <Card>
+                    <img
+                      src={getFabricatorImageUrl(fabricator.link)}
+                      alt={fabricator.name}
+                    />
+                  </Card>
+                </SImageCard>
                 <div>{fabricator.name}</div>
               </SAttribute>
               <SAttribute>
@@ -93,7 +125,23 @@ const ProductPage: NextPage<IProps & IWithProductPageState> = ({
               </SButtonRow>
             </Col>
             <Col>
-              <img src={imageUrl} alt={imageUrl} />
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt='product-image'
+                  width={500}
+                  height={500}
+                />
+              ) : (
+                defaultPhoto && (
+                  <Image
+                    src={defaultPhoto}
+                    alt='product-image'
+                    width={500}
+                    height={500}
+                  />
+                )
+              )}
             </Col>
           </Row>
 
@@ -108,9 +156,9 @@ const ProductPage: NextPage<IProps & IWithProductPageState> = ({
 
       <Feedback initialValue={vendor} />
 
-      <SFooter>
+      <div>
         <Footer />
-      </SFooter>
+      </div>
     </>
   );
 };
@@ -122,9 +170,6 @@ const SHeader = styled.div`
 `;
 const SWrapper = styled.div`
   margin-top: 20px;
-`;
-const SFooter = styled.div`
-  margin-top: 50px;
 `;
 const SAttribute = styled.div`
   margin-top: 10px;
@@ -146,4 +191,8 @@ const SNotice = styled.div`
 `;
 const SHistoryButton = styled.div`
   margin: 10px 0;
+`;
+const SImageCard = styled.div`
+  width: 30%;
+  height: 30%;
 `;

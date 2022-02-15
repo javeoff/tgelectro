@@ -8,9 +8,9 @@ import {
 import { createWrapper } from 'next-redux-wrapper';
 
 import { commonSlice } from '@common/duck/slice';
-import { catalogSlice } from '@pages/index/components/Catalog/duck/slice';
 import { Feature } from '@common/enums/Feature';
 import { adminSlice } from '@pages/admin/duck/slice';
+import { catalogSlice } from '@components/Catalog/duck/slice';
 
 const reducer = {
   [Feature.COMMON]: commonSlice.reducer,

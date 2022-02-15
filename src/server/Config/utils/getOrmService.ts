@@ -14,10 +14,10 @@ export const getOrmService = <Service extends IBaseConfigService>(
   password: configService.get(DatabaseName.DB_PASSWORD),
   database: configService.get(DatabaseName.DB_DATABASE),
   entities: ['src/server/**/*.entity.ts'],
-  migrations: ['src/server/**/migrations/*.migration.ts'],
+  migrations: ['src/server/**/*.migration.ts'],
   synchronize: true,
   cli: {
-    migrationsDir: 'src/migrations',
+    migrationsDir: 'src/server/Common/migrations',
   },
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),

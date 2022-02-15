@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Button, Col, Container, Row } from 'reactstrap';
 import styled from 'styled-components';
+
 import { mainColor } from '@common/utils/colors';
 import { Logo } from '@components/Logo/Logo';
 import { Contacts } from '@components/Contacts/Contacts';
@@ -23,7 +24,9 @@ const HeaderComponent: FC<IWithHeaderState> = ({ setModalId }) => (
           </SRightWrapper>
         </Col>
         <Col xs={12} sm={12} md={12} lg={6}>
-          <SearchInput />
+          <SSearchInput>
+            <SearchInput />
+          </SSearchInput>
         </Col>
         <Col xs={12} sm={12} md={12} lg={6}>
           <SRightWrapper>
@@ -61,9 +64,23 @@ export const SButtonRow = styled.div`
   justify-content: right;
   display: flex;
 
+  @media screen and (max-width: 992px) {
+    display: block;
+  }
+
   & > * {
     margin-left: 20px;
     background: ${mainColor};
     border: 1px solid transparent;
+
+    @media screen and (max-width: 992px) {
+      display: block;
+      margin: 10px 0;
+      width: 100%;
+    }
   }
+`;
+
+const SSearchInput = styled.div`
+  margin-top: 10px;
 `;

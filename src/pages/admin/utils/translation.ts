@@ -6,7 +6,8 @@ export const editItemTranslation: Record<string, string> = {
 
 export const fieldTypeTranslation: Record<string, string> = {
   id: 'Идентификатор',
-  parentId: 'Идентификатор родителя',
+  parent: 'Родитель',
+  children: 'Дочерние',
   vendor: 'Артикул',
   alternativeVendor: 'Альтернативный артикул',
   imageUrl: 'Изображение',
@@ -17,6 +18,6 @@ export const fieldTypeTranslation: Record<string, string> = {
   fabricators: 'Производители',
   products: 'Продукты',
   categories: 'Категории',
-  fabricator: 'Идентификатор производителя',
-  category: 'Идентификатор категории',
+  fabricator: 'Производитель',
+  category: 'Категория',
 };

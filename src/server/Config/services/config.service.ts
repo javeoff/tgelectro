@@ -28,3 +28,5 @@ export class ConfigService {
     return this.get(ConfigName.NODE_ENV) === 'development';
   }
 }
+
+export const configService = new ConfigService(new SystemErrorFactory());

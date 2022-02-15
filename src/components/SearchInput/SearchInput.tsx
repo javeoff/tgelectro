@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button, Input } from 'reactstrap';
-import { FC, useState } from 'react';
+import { FC, useState, ChangeEvent } from 'react';
 import qs from 'qs';
 import { useRouter } from 'next/router';
 
@@ -25,16 +25,22 @@ export const SearchInput: FC<IProps> = ({ searchQuery = '' }) => {
     }
   };
 
+  const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setValue(e.currentTarget.value);
+  };
+
   return (
     <SInputWrapper>
       <SSearchInput
         placeholder='Поиск по артикулу или названию'
         defaultValue={searchQuery}
-        onChange={(e) => setValue(e.currentTarget.value)}
+        onChange={onSearchInputChange}
         onKeyPress={onEnterPress}
       />
       <SSearchButton onClick={onSearchStart}>
-        <SearchIcon color='#fff' width='22px' height='22px' />
+        <SSearchIcon>
+          <SearchIcon />
+        </SSearchIcon>
       </SSearchButton>
     </SInputWrapper>
   );
@@ -53,4 +59,9 @@ const SSearchButton = styled(Button)`
   border-radius: 0 2px 2px 0;
   background: ${mainColor};
   border: 1px solid transparent;
+`;
+const SSearchIcon = styled.div`
+  color: #fff;
+  width: 22px;
+  height: 22px;
 `;

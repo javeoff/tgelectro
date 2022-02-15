@@ -9,16 +9,24 @@ import { ListName } from '@pages/admin/enums/ListName';
 
 @Injectable()
 export class TableListFactory {
-  public getCategoriesList(categories: ICategory[]): IRow[] {
-    const headerRow: IValue[] = [
-      'Идентификатор',
-      'Название',
-      'Продукты',
-      'Действие',
-    ];
+  private readonly headerRow: IValue[] = [
+    'Идентификатор',
+    'Название',
+    'Продукты',
+    'Действие',
+  ];
 
-    return [
-      { values: headerRow },
+  public getCategoriesList(
+    categories: ICategory[],
+    withHeaderRow?: boolean,
+  ): IRow[] {
+    const list: IRow[] = [];
+
+    if (withHeaderRow) {
+      list.push({ values: this.headerRow });
+    }
+
+    list.push(
       ...categories.map((category) => ({
         values: [
           category.id,
@@ -27,19 +35,22 @@ export class TableListFactory {
           this.getLinks(category.id, ListName.CATEGORIES),
         ] as IValue[],
       })),
-    ];
+    );
+
+    return list;
   }
 
-  public getFabricatorsList(fabricators: IFabricator[]): IRow[] {
-    const headerRow: IValue[] = [
-      'Идентификатор',
-      'Название',
-      'Продукты',
-      'Действие',
-    ];
+  public getFabricatorsList(
+    fabricators: IFabricator[],
+    withHeaderRow?: boolean,
+  ): IRow[] {
+    const list: IRow[] = [];
 
-    return [
-      { values: headerRow },
+    if (withHeaderRow) {
+      list.push({ values: this.headerRow });
+    }
+
+    list.push(
       ...fabricators.map((fabricator) => ({
         values: [
           fabricator.id,
@@ -48,10 +59,16 @@ export class TableListFactory {
           this.getLinks(fabricator.id, ListName.FABRICATORS),
         ] as IValue[],
       })),
-    ];
+    );
+
+    return list;
   }
 
-  public getProductsList(products: IProduct[]): IRow[] {
+  public getProductsList(
+    products: IProduct[],
+    withHeaderRow?: boolean,
+  ): IRow[] {
+    const list: IRow[] = [];
     const headerRow: IValue[] = [
       'Идентификатор',
       'Артикул',
@@ -59,14 +76,17 @@ export class TableListFactory {
       'Действие',
     ];
 
-    return [
-      { values: headerRow },
+    if (withHeaderRow) {
+      list.push({ values: headerRow });
+    }
+
+    list.push(
       ...products.map((product) => ({
         values: [
           product.id,
           [
             {
-              url: '#',
+              url: `/products/${product.vendor}`,
               text: `${product.vendor} (${product.alternativeVendor})`,
             },
           ],
@@ -74,7 +94,9 @@ export class TableListFactory {
           this.getLinks(product.id, ListName.PRODUCTS),
         ] as IValue[],
       })),
-    ];
+    );
+
+    return list;
   }
 
   private getLinks: (itemId: number, itemType: ListName) => ILink[] = (

@@ -37,6 +37,13 @@ const SButton = styled.button<{
   border-radius: 5px;
 
   ${({ size }) =>
+    size === 'lg' &&
+    css`
+      font-size: 1.2em;
+      padding: 10px 30px;
+    `}
+
+  ${({ size }) =>
     size === 'md' &&
     css`
       padding: 5px 15px;
