@@ -53,7 +53,11 @@ export class FabricatorController {
     @Param() param: { fabricatorName: string },
     @Res() response: Response,
   ): void {
-    const filePath = path.resolve(__dirname, '../img/', param.fabricatorName);
+    const filePath = path.resolve(
+      __dirname,
+      '../__mock__/img.mock/',
+      param.fabricatorName,
+    );
 
     response.sendFile(filePath);
   }
